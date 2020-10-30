@@ -11,14 +11,6 @@ namespace RemovePlayerLimit {
 			get => (int)Mathf.Ceil(PlayerControl.AllPlayerControls.Count / 10f);
 		}
 
-		//[HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CastVote), typeof(byte), typeof(sbyte))]
-		public static class MeetingHudCastVotePatch {
-			public static bool Prefix(MeetingHud __instance, byte KLCOOECLPOK, sbyte BDPGFEHNPBD) {
-				RemovePlayerLimitPlugin.Logger.LogDebug("Received castvote from player " + KLCOOECLPOK + " for " + BDPGFEHNPBD);
-				return true;
-			}
-		}
-
 		[HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
 		public static class VoteGuiPatch {
 			public static void Postfix(MeetingHud __instance) {
@@ -45,7 +37,6 @@ namespace RemovePlayerLimit {
 			}
 		}
 
-
 		[HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.OIDNFMKACJP))]
 		public static class MeetingHudCheckForEndVotingPatch {
 			public static bool Prefix(MeetingHud __instance) {
@@ -66,7 +57,6 @@ namespace RemovePlayerLimit {
 
 					MeetingHudHandleRpcPatch.VotingComplete(__instance, states, votes, exiled, tie);
 				}
-				//RemovePlayerLimitPlugin.Logger.LogDebug("OIDNFMKACJP end");
 				return false;
 			}
 
@@ -144,7 +134,6 @@ namespace RemovePlayerLimit {
 			}
 
 			public static void PopulateResults(MeetingHud __instance, byte[] states, byte[] votes) {
-				//DestroyableSingleton<Telemetry>.LINLGEBAKJC.WriteMeetingEnded(__instance.discussionTimer);
 				__instance.TitleText.Text = "Voting Results";
 				int num = 0;
 				for (int i = 0; i < __instance.FALDLDJHDDJ.Length; i++) {

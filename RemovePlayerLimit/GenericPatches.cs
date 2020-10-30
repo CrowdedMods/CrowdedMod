@@ -7,7 +7,6 @@ namespace RemovePlayerLimit {
 		[HarmonyPatch(typeof(GameData), nameof(GameData.GetAvailableId))]
 		public static class GameDataAvailableIdPatch {
 			public static bool Prefix(ref GameData __instance, ref sbyte __result) {
-				//RemovePlayerLimitPlugin.Logger.LogInfo("Assigned unique player id: " + UniquePlayerId);
 				__result = UniquePlayerId++;
 				//TODO: check other players
 				return false;
