@@ -2,14 +2,26 @@
 
 namespace RemovePlayerLimit {
 	class GenericPatches {
-		static sbyte UniquePlayerId = 0;
-		
+		//static sbyte UniquePlayerId = 0;
+
 		[HarmonyPatch(typeof(GameData), nameof(GameData.GetAvailableId))]
 		public static class GameDataAvailableIdPatch {
 			public static bool Prefix(ref GameData __instance, ref sbyte __result) {
-				__result = UniquePlayerId++;
-				//TODO: check other players
+				//__result = UniquePlayerId++;
+				for (int i = 0; i < 128; i++)
+					if (checkId(__instance, i)) {
+						__result = (sbyte)i;
+						return false;
+					}
+				__result = -1;
 				return false;
+			}
+
+			static bool checkId(GameData __instance, int id) {
+				foreach (GameData.IHEKEPMDGIJ p in __instance.AllPlayers)
+					if (p.FIOIBHIDDOC == id)
+						return false;
+				return true;
 			}
 		}
 
