@@ -43,7 +43,7 @@ namespace RemovePlayerLimit {
 				if (__instance.FALDLDJHDDJ.All((PlayerVoteArea ps) => ps.isDead || ps.didVote)) {
 					byte[] self = calculateVotes(__instance.FALDLDJHDDJ);
 
-					int maxIdx = indexOfMax(self, out bool tie);
+					int maxIdx = indexOfMax(self, out bool tie) - 1;
 					GameData.IHEKEPMDGIJ exiled = GameData.Instance.GetPlayerById((byte)maxIdx);
 					byte[] states = __instance.FALDLDJHDDJ.Select(s => s.GetState()).ToArray();
 					byte[] votes = __instance.FALDLDJHDDJ.Select(s => (byte)s.votedFor).ToArray();
@@ -65,8 +65,8 @@ namespace RemovePlayerLimit {
 				for (int i = 0; i < states.Length; i++) {
 					PlayerVoteArea playerVoteArea = states[i];
 					if (playerVoteArea.didVote)
-						if (playerVoteArea.votedFor >= 0 && playerVoteArea.votedFor < states.Length)
-							self[playerVoteArea.votedFor]++;
+						if (playerVoteArea.votedFor + 1 >= 0 && playerVoteArea.votedFor + 1 < states.Length)
+							self[playerVoteArea.votedFor + 1]++;
 				}
 				return self;
 			}
@@ -143,7 +143,7 @@ namespace RemovePlayerLimit {
 					for (int j = 0; j < states.Length; j++) {
 						if ((states[j] & 128) == 0) { //!isDead
 							GameData.IHEKEPMDGIJ playerById = GameData.Instance.GetPlayerById((byte)__instance.FALDLDJHDDJ[j].TargetPlayerId);
-							int votedFor = (int)votes[j];
+							int votedFor = (sbyte)votes[j];
 
 							SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
 							PlayerControl.SetPlayerMaterialColors((int)playerById.LHKAPPDILFP, spriteRenderer);
