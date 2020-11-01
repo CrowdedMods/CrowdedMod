@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 
 namespace RemovePlayerLimit {
-    [BepInPlugin("it.andry08.removeplayerlimit", "Player Limit Remove", "0.1")]
+    [BepInPlugin("it.andry08.removeplayerlimit", "Player Limit Remove", "1.0")]
     public class RemovePlayerLimitPlugin : BasePlugin {
 
         static internal BepInEx.Logging.ManualLogSource Logger;
