@@ -33,13 +33,6 @@ namespace RemovePlayerLimit {
 			}
 		}
 
-		[HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.JBBOGJHCEOI))]
-		public static class PlayerTabSelectColorPatch {
-			public static void Postfix(PlayerTab __instance) {
-				__instance.UpdateAvailableColors();
-			}
-		}
-
 		[HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.UpdateAvailableColors))]
 		public static class PlayerTabUpdateAvailableColorsPatch {
 			public static bool Prefix(PlayerTab __instance) {
