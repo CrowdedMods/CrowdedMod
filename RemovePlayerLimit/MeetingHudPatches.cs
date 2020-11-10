@@ -61,11 +61,11 @@ namespace RemovePlayerLimit {
 			}
 
 			static byte[] calculateVotes(PlayerVoteArea[] states) {
-				byte[] self = new byte[states.Length];
+				byte[] self = new byte[states.Length + 1];
 				for (int i = 0; i < states.Length; i++) {
 					PlayerVoteArea playerVoteArea = states[i];
 					if (playerVoteArea.didVote)
-						if (playerVoteArea.votedFor + 1 >= 0 && playerVoteArea.votedFor + 1 < states.Length)
+						if (playerVoteArea.votedFor + 1 >= 0 && playerVoteArea.votedFor + 1 < self.Length)
 							self[playerVoteArea.votedFor + 1]++;
 				}
 				return self;
