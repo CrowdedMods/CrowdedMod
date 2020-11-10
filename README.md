@@ -16,7 +16,7 @@ You will have to change those values by other means (e.g. Cheat Engine)
 2. Here on github, select the latest release in the right sidebar.
 3. Download the `.dll` and `.zip` files (The mod itself and the modloader respectively).
 	- Alternatively you can download this repository and compile the `.dll` mod yourself.
-	- You can also download the latest `.zip` of [BepInEx](https://github.com/BepInEx/BepInEx) IL2CPP version (At the time of writing however it's still in beta, I found it in their discord server)
+	- You can also download the latest `.zip` of [BepInEx](https://github.com/BepInEx/BepInEx) IL2CPP version (You can download bleeding edge builds [here](https://builds.bepis.io/projects/bepinex_be) now)
 4. Extract the modloader's `.zip` into the Among Us directory (where the `Among Us.exe` executable is located)
 5. Navigate to the `BepInEx/plugins` subfolder (It should be there, you just extracted it)
 6. Copy the mod's `.dll` file there.
