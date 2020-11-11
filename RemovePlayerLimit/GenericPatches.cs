@@ -4,9 +4,9 @@ namespace RemovePlayerLimit {
 	class GenericPatches {
 		//static sbyte UniquePlayerId = 0;
 
-		[HarmonyPatch(typeof(GameData), nameof(GameData.GetAvailableId))]
+		[HarmonyPatch(typeof(BAGGGBBOHOH), nameof(BAGGGBBOHOH.GetAvailableId))]
 		public static class GameDataAvailableIdPatch {
-			public static bool Prefix(ref GameData __instance, ref sbyte __result) {
+			public static bool Prefix(ref BAGGGBBOHOH __instance, ref sbyte __result) {
 				//__result = UniquePlayerId++;
 				for (int i = 0; i < 128; i++)
 					if (checkId(__instance, i)) {
@@ -17,28 +17,28 @@ namespace RemovePlayerLimit {
 				return false;
 			}
 
-			static bool checkId(GameData __instance, int id) {
-				foreach (GameData.IHEKEPMDGIJ p in __instance.AllPlayers)
-					if (p.FIOIBHIDDOC == id)
+			static bool checkId(BAGGGBBOHOH __instance, int id) {
+				foreach (BAGGGBBOHOH.FGMBFCIIILC p in __instance.AllPlayers)
+					if (p.PAGHECLPIMH == id)
 						return false;
 				return true;
 			}
 		}
 
-		[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor), typeof(byte))]
+		[HarmonyPatch(typeof(GLHCHLEDNBA), nameof(GLHCHLEDNBA.CheckColor), typeof(byte))]
 		public static class PlayerControlCheckColorPatch {
-			public static bool Prefix(PlayerControl __instance, byte GBOFPFOGPJO) {
-				__instance.RpcSetColor(GBOFPFOGPJO);
+			public static bool Prefix(GLHCHLEDNBA __instance, byte AGLNDGIHLPG) {
+				__instance.RpcSetColor(AGLNDGIHLPG);
 				return false;
 			}
 		}
 
-		[HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.UpdateAvailableColors))]
+		[HarmonyPatch(typeof(DICIDCLJJFH), nameof(DICIDCLJJFH.UpdateAvailableColors))]
 		public static class PlayerTabUpdateAvailableColorsPatch {
-			public static bool Prefix(PlayerTab __instance) {
-				PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer.FIPOLMBOBHM.LHKAPPDILFP, __instance.DemoImage);
-				for (int i = 0; i < KMGFBENDNFO.FOJPMGJFKMB.Length; i++)
-					__instance.FKAFOGKGPLM.Add(i);
+			public static bool Prefix(DICIDCLJJFH __instance) {
+				GLHCHLEDNBA.SetPlayerMaterialColors(GLHCHLEDNBA.LocalPlayer.HMPLOOHMKEN.LMDCNHODEAN, __instance.DemoImage);
+				for (int i = 0; i < KPNJLIGHOEI.FLKMIOFABCO.Length; i++)
+					__instance.JBGOCGMNPBP.Add(i);
 				return false;
 			}
 		}

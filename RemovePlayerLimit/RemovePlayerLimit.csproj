@@ -32,29 +32,29 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\..\Among.Us.Incl.DLC.v09.22.2020s\BepInEx\core\0Harmony.dll</HintPath>
+      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\Among.Us.Incl.DLC.v09.22.2020s\BepInEx\unhollowed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx.Core">
-      <HintPath>..\..\Among.Us.Incl.DLC.v09.22.2020s\BepInEx\core\BepInEx.Core.dll</HintPath>
+      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\core\BepInEx.Core.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx.Harmony">
-      <HintPath>..\..\Among.Us.Incl.DLC.v09.22.2020s\BepInEx\core\BepInEx.Harmony.dll</HintPath>
+      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\core\BepInEx.Harmony.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx.IL2CPP">
-      <HintPath>..\..\Among.Us.Incl.DLC.v09.22.2020s\BepInEx\core\BepInEx.IL2CPP.dll</HintPath>
+      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\core\BepInEx.IL2CPP.dll</HintPath>
     </Reference>
     <Reference Include="Hazel, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Among.Us.Incl.DLC.v09.22.2020s\BepInEx\unhollowed\Hazel.dll</HintPath>
+      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\Hazel.dll</HintPath>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
-      <HintPath>..\..\Among.Us.Incl.DLC.v09.22.2020s\BepInEx\unhollowed\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\Il2Cppmscorlib.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSystem.Core">
-      <HintPath>..\..\Among.Us.Incl.DLC.v09.22.2020s\BepInEx\unhollowed\Il2CppSystem.Core.dll</HintPath>
+      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\Il2CppSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -64,17 +64,17 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnhollowerBaseLib">
-      <HintPath>..\..\Among.Us.Incl.DLC.v09.22.2020s\BepInEx\unhollowed\UnhollowerBaseLib.dll</HintPath>
+      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\UnhollowerBaseLib.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\Among.Us.Incl.DLC.v09.22.2020s\BepInEx\unhollowed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Among.Us.Incl.DLC.v09.22.2020s_dev\BepInEx\unhollowed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>..\..\Among.Us.Incl.DLC.v09.22.2020s\BepInEx\unhollowed\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
