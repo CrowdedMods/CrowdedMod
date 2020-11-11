@@ -8,19 +8,18 @@ Hence the name itself derives from the [Impostor project](https://github.com/Aeo
 discussion, in which "100 players mod when?" has become a meme.
 
 ## Limitations
-By itself this mod doesn't allow to select more than 10 players or more than 3 impostors.
+By itself this mod doesn't allow to choose more than 10 players or more than 3 impostors in the game creation menu.
 You will have to change those values by other means (e.g. Cheat Engine)
 
 ## Installation
-1. Make sure you got the **v2020.9.22** version of Among Us.
-2. Here on github, select the latest release in the right sidebar.
-3. Download the `.dll` and `.zip` files (The mod itself and the modloader respectively).
+1. Here on the right sidebar, choose the latest version supporting your game version (as indicated in parentheses).
+2. Download the `.dll` and `.zip` files (The mod itself and the modloader respectively).
 	- Alternatively you can download this repository and compile the `.dll` mod yourself.
 	- You can also download the latest `.zip` of [BepInEx](https://github.com/BepInEx/BepInEx) IL2CPP version (You can download bleeding edge builds [here](https://builds.bepis.io/projects/bepinex_be) now)
-4. Extract the modloader's `.zip` into the Among Us directory (where the `Among Us.exe` executable is located)
-5. Navigate to the `BepInEx/plugins` subfolder (It should be there, you just extracted it)
-6. Copy the mod's `.dll` file there.
-7. Start Among Us and try it out.
+3. Extract the modloader's `.zip` into the Among Us directory (where the `Among Us.exe` executable is located)
+4. Navigate to the `BepInEx/plugins` subfolder (It should be there, you just extracted it)
+5. Copy the mod's `.dll` file there.
+6. Start Among Us and try it out.
 
 ## Credits
 - [andruzzzhka/CustomServersClient](https://github.com/andruzzzhka/CustomServersClient) - This is where I learned how to mod Among Us
