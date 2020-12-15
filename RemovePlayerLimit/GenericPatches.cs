@@ -1,13 +1,29 @@
 ﻿using HarmonyLib;
+using System.Collections.Generic;
+using UnhollowerBaseLib;
+using PlayerControl = FFGALNAPKCD;
+using PlayerTab = MAOILGPNFND;
+using PlayerInfo = EGLJNOMOGNP.DCJMABDDJCF;
+using GameData = EGLJNOMOGNP;
+using Palette = LOCPGOACAJF;
+using RegionMenu = CLIGCNHFBCO;
+using RegionInfo = OIBMKGDLGOG;
+using ServerInfo = PLFDMKKDEMI;
+using ServerManager = AOBNFCIHAJL;
+using ObjectPoolBehavior = FJBFFDFFBFO;
+using PassiveButton = HHMBANDDIOA;
 
-namespace RemovePlayerLimit {
+namespace CrowdedMod {
 	class GenericPatches {
-		//static sbyte UniquePlayerId = 0;
+        public static List<CustomServerInfo> customServers = new List<CustomServerInfo>();
 
-		[HarmonyPatch(typeof(BAGGGBBOHOH), nameof(BAGGGBBOHOH.GetAvailableId))]
+        static RegionInfo[] _defaultRegions = new RegionInfo[3];
+
+        static bool _firstRun = true;
+
+        [HarmonyPatch(typeof(GameData), nameof(GameData.GetAvailableId))]
 		public static class GameDataAvailableIdPatch {
-			public static bool Prefix(ref BAGGGBBOHOH __instance, ref sbyte __result) {
-				//__result = UniquePlayerId++;
+			public static bool Prefix(ref GameData __instance, ref sbyte __result) {
 				for (int i = 0; i < 128; i++)
 					if (checkId(__instance, i)) {
 						__result = (sbyte)i;
@@ -17,30 +33,89 @@ namespace RemovePlayerLimit {
 				return false;
 			}
 
-			static bool checkId(BAGGGBBOHOH __instance, int id) {
-				foreach (BAGGGBBOHOH.FGMBFCIIILC p in __instance.AllPlayers)
-					if (p.PAGHECLPIMH == id)
+			static bool checkId(GameData __instance, int id) {
+				foreach (PlayerInfo p in __instance.AllPlayers)
+					if (p.JKOMCOJCAID == id)
 						return false;
 				return true;
 			}
 		}
 
-		[HarmonyPatch(typeof(GLHCHLEDNBA), nameof(GLHCHLEDNBA.CheckColor), typeof(byte))]
+		[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor), typeof(byte))]
 		public static class PlayerControlCheckColorPatch {
-			public static bool Prefix(GLHCHLEDNBA __instance, byte AGLNDGIHLPG) {
-				__instance.RpcSetColor(AGLNDGIHLPG);
+			public static bool Prefix(PlayerControl __instance, byte POCIJABNOLE) {
+				__instance.RpcSetColor(POCIJABNOLE);
 				return false;
 			}
 		}
 
-		[HarmonyPatch(typeof(DICIDCLJJFH), nameof(DICIDCLJJFH.UpdateAvailableColors))]
+		[HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.UpdateAvailableColors))]
 		public static class PlayerTabUpdateAvailableColorsPatch {
-			public static bool Prefix(DICIDCLJJFH __instance) {
-				GLHCHLEDNBA.SetPlayerMaterialColors(GLHCHLEDNBA.LocalPlayer.HMPLOOHMKEN.LMDCNHODEAN, __instance.DemoImage);
-				for (int i = 0; i < KPNJLIGHOEI.FLKMIOFABCO.Length; i++)
-					__instance.JBGOCGMNPBP.Add(i);
+			public static bool Prefix(PlayerTab __instance) {
+				PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer.NDGFFHMFGIG.EHAHBDFODKC, __instance.DemoImage);
+				for (int i = 0; i < Palette.OPKIKLENHFA.Length; i++)
+					__instance.LGAIKONLBIG.Add(i);
 				return false;
 			}
 		}
-	}
+        // CUSTOMSERVERSCLIENT
+        [HarmonyPatch(typeof(RegionMenu), nameof(RegionMenu.OnEnable))]
+        public static class RegionMenuOnEnablePatch
+        {
+            public static bool forceReloadServers;
+
+            public static bool Prefix(ref RegionMenu __instance)
+            {
+                ClearOnClickAction(__instance.ButtonPool);
+
+                if (_firstRun)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        _defaultRegions[i] = ServerManager.DefaultRegions[i];
+                    }
+
+                    _firstRun = false;
+                    customServers.Add(new CustomServerInfo("Paschtet Tournaments", "45.142.255.213", 22023));
+                }
+
+                if (ServerManager.DefaultRegions.Count != 3 + customServers.Count || forceReloadServers)
+                {
+                    var regions = new RegionInfo[3 + customServers.Count];
+
+                    for (int i = 0; i < 3; i++)
+                    {
+                        regions[i] = _defaultRegions[i];
+                    }
+                    for (int i = 0; i < customServers.Count; i++)
+                    {
+                        Il2CppReferenceArray<ServerInfo> servers = new ServerInfo[1] { new ServerInfo(customServers[i].name, customServers[i].ip, (ushort)customServers[i].port) };
+
+                        regions[i + 3] = new RegionInfo(customServers[i].name, "0", servers);
+                    }
+
+                    ServerManager.DefaultRegions = regions;
+                }
+
+                return true;
+            }
+
+            public static void ClearOnClickAction(ObjectPoolBehavior buttonPool)
+            {
+                foreach (var button in buttonPool.activeChildren)
+                {
+                    var buttonComponent = button.GetComponent<PassiveButton>();
+                    if (buttonComponent != null)
+                        buttonComponent.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+                }
+
+                foreach (var button in buttonPool.inactiveChildren)
+                {
+                    var buttonComponent = button.GetComponent<PassiveButton>();
+                    if (buttonComponent != null)
+                        buttonComponent.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+                }
+            }
+        }
+    }
 }

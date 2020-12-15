@@ -7,8 +7,8 @@
     <ProjectGuid>{AB79A6CE-60D8-4F2F-9797-7F92A3EFCBF2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RemovePlayerLimit</RootNamespace>
-    <AssemblyName>RemovePlayerLimit</AssemblyName>
+    <RootNamespace>CrowdedMod</RootNamespace>
+    <AssemblyName>CrowdedMod</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -32,29 +32,29 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\core\0Harmony.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\Assembly-CSharp.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx.Core">
-      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\core\BepInEx.Core.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\core\BepInEx.Core.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx.Harmony">
-      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\core\BepInEx.Harmony.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\core\BepInEx.Harmony.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx.IL2CPP">
-      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\core\BepInEx.IL2CPP.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\core\BepInEx.IL2CPP.dll</HintPath>
     </Reference>
     <Reference Include="Hazel, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\Hazel.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\Hazel.dll</HintPath>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
-      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\Il2Cppmscorlib.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSystem.Core">
-      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\Il2CppSystem.Core.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\Il2CppSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -64,20 +64,25 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnhollowerBaseLib">
-      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\UnhollowerBaseLib.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\UnhollowerBaseLib.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\UnityEngine.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>..\..\Among.Us.v2020.10.22s\BepInEx\unhollowed\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libs\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomServerInfo.cs" />
     <Compile Include="MeetingHudPatches.cs" />
     <Compile Include="GenericPatches.cs" />
     <Compile Include="RemovePlayerLimitPlugin.cs" />
