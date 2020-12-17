@@ -12,6 +12,7 @@ namespace CrowdedMod {
 
         public override void Load() {
             Logger = Log;
+            ServersParser.Parse();
 
             KMOGFLPJLLK.EICIGKMJIMF = KMOGFLPJLLK.MGGHFLMODBE = Enumerable.Repeat<int>(255, 255).ToArray<int>();
             _harmony = Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
