@@ -60,8 +60,6 @@ namespace CrowdedMod {
         [HarmonyPatch(typeof(RegionMenu), nameof(RegionMenu.OnEnable))]
         public static class RegionMenuOnEnablePatch
         {
-            public static bool forceReloadServers;
-
             public static bool Prefix(ref RegionMenu __instance)
             {
                 ClearOnClickAction(__instance.ButtonPool);
@@ -76,7 +74,7 @@ namespace CrowdedMod {
                     _firstRun = false;
                 }
 
-                if (ServerManager.DefaultRegions.Count != 3 + ServersParser.servers.Count || forceReloadServers)
+                if (ServerManager.DefaultRegions.Count != 3 + ServersParser.servers.Count)
                 {
                     var regions = new RegionInfo[3 + ServersParser.servers.Count];
 
