@@ -15,8 +15,6 @@ using PassiveButton = HHMBANDDIOA;
 
 namespace CrowdedMod {
 	class GenericPatches {
-        public static List<CustomServerInfo> customServers = new List<CustomServerInfo>();
-
         static RegionInfo[] _defaultRegions = new RegionInfo[3];
 
         static bool _firstRun = true;
@@ -76,22 +74,21 @@ namespace CrowdedMod {
                     }
 
                     _firstRun = false;
-                    customServers.Add(new CustomServerInfo("Paschtet Tournaments", "45.142.255.213", 22023));
                 }
 
-                if (ServerManager.DefaultRegions.Count != 3 + customServers.Count || forceReloadServers)
+                if (ServerManager.DefaultRegions.Count != 3 + ServersParser.servers.Count || forceReloadServers)
                 {
-                    var regions = new RegionInfo[3 + customServers.Count];
+                    var regions = new RegionInfo[3 + ServersParser.servers.Count];
 
                     for (int i = 0; i < 3; i++)
                     {
                         regions[i] = _defaultRegions[i];
                     }
-                    for (int i = 0; i < customServers.Count; i++)
+                    for (int i = 0; i < ServersParser.servers.Count; i++)
                     {
-                        Il2CppReferenceArray<ServerInfo> servers = new ServerInfo[1] { new ServerInfo(customServers[i].name, customServers[i].ip, (ushort)customServers[i].port) };
+                        Il2CppReferenceArray<ServerInfo> servers = new ServerInfo[1] { new ServerInfo(ServersParser.servers[i].name, ServersParser.servers[i].ip, (ushort)ServersParser.servers[i].port) };
 
-                        regions[i + 3] = new RegionInfo(customServers[i].name, "0", servers);
+                        regions[i + 3] = new RegionInfo(ServersParser.servers[i].name, "0", servers);
                     }
 
                     ServerManager.DefaultRegions = regions;
