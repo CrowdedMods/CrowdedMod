@@ -32,29 +32,29 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\core\0Harmony.dll</HintPath>
+      <HintPath>..\Libs\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\Libs\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx.Core">
-      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\core\BepInEx.Core.dll</HintPath>
+      <HintPath>..\Libs\BepInEx.Core.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx.Harmony">
-      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\core\BepInEx.Harmony.dll</HintPath>
+      <HintPath>..\Libs\BepInEx.Harmony.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx.IL2CPP">
-      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\core\BepInEx.IL2CPP.dll</HintPath>
+      <HintPath>..\Libs\BepInEx.IL2CPP.dll</HintPath>
     </Reference>
     <Reference Include="Hazel, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\Hazel.dll</HintPath>
+      <HintPath>..\Libs\Hazel.dll</HintPath>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
-      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>..\Libs\Il2Cppmscorlib.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSystem.Core">
-      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\Il2CppSystem.Core.dll</HintPath>
+      <HintPath>..\Libs\Il2CppSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -64,17 +64,17 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnhollowerBaseLib">
-      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\UnhollowerBaseLib.dll</HintPath>
+      <HintPath>..\Libs\UnhollowerBaseLib.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\UnityEngine.dll</HintPath>
+      <HintPath>..\Libs\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\Libs\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>D:\Steam\steamapps\common\Among Us\BepInEx\unhollowed\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>..\Libs\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
