@@ -87,6 +87,7 @@
     <Compile Include="GenericPatches.cs" />
     <Compile Include="RemovePlayerLimitPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServersParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
