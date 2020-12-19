@@ -2,7 +2,6 @@
 using HarmonyLib;
 using System.Linq;
 using Hazel;
-using System.Net.NetworkInformation;
 using PlayerControl = FFGALNAPKCD;
 using MeetingHud = OOCJALPKPEP;
 using PlayerVoteArea = HDJGDMFCHDN;

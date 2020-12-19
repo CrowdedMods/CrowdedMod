@@ -11,6 +11,9 @@ You will have to change those values by other means (using memory editing or for
 ## Installation
 Not avaliable yet. SOON™
 
+## Discord
+Join our [Discord Server](https://discord.gg/XEc7PdDTyn) to chat, collaborate and get help.
+
 ## Credits
 - [andruzzzhka/CustomServersClient](https://github.com/andruzzzhka/CustomServersClient) - This is where andry08 and i learned how to mod Among Us. Some snippets of code for custom servers are here.
 - [andry08](https://github.com/andry08) - Original author of this plugin. *Looking for contact to him*
