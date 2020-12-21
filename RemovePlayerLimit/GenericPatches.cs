@@ -12,6 +12,7 @@ using ServerInfo = PLFDMKKDEMI;
 using ServerManager = AOBNFCIHAJL;
 using ObjectPoolBehavior = FJBFFDFFBFO;
 using PassiveButton = HHMBANDDIOA;
+using KeyMinigame = AMKEIECODLC;
 
 namespace CrowdedMod {
 	class GenericPatches {
@@ -110,6 +111,15 @@ namespace CrowdedMod {
                     if (buttonComponent != null)
                         buttonComponent.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
                 }
+            }
+        }
+        [HarmonyPatch(typeof(KeyMinigame),nameof(KeyMinigame.Start))]
+        public static class KeyMinigamePatch
+        {
+            public static void Postfix(ref KeyMinigame __instance)
+            {
+                PlayerControl localPlayer = PlayerControl.LocalPlayer;
+                __instance.ECHAPHLBHDC = (int)((localPlayer != null) ? localPlayer.PlayerId % 10 : 0);
             }
         }
     }
