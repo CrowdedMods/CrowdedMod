@@ -1,4 +1,3 @@
-![Our Discord]()
 [![Our Discord](https://img.shields.io/discord/787008412482797598?color=7289da&label=DISCORD&style=for-the-badge)](https://discord.gg/XEc7PdDTyn)
 # CrowdedMod
 This mod unlocks the possibility for more than 10 player to join in an Among Us lobby.
