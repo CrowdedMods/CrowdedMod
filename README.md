@@ -12,5 +12,6 @@ You will have to change those values by other means (using memory editing or for
 Not avaliable yet. SOON™
 
 ## Credits
+- [andry08/100-player-mod](https://github.com/andry08/100-player-mod) - Original author of this plugin. RayanTheBest/100-player-mod was a mirror of this, now we have an official link.
 - [andruzzzhka/CustomServersClient](https://github.com/andruzzzhka/CustomServersClient) - This is where andry08 and i learned how to mod Among Us. Some snippets of code for custom servers are here.
-- [andry08](https://github.com/andry08) - Original author of this plugin. *Looking for contact to him*
+
