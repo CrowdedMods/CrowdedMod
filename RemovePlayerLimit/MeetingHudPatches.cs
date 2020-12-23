@@ -184,7 +184,7 @@ namespace CrowdedMod {
 		{
 			public static void Postfix(VersionShower __instance)
 			{
-				__instance.text.Text = "Among Us " + __instance.text.Text + " \n[3DAD2BFF]Crowded Mod v3.2 by Przebot#2448 \nForked from andry08";
+				__instance.text.Text = "Among Us " + __instance.text.Text + " \n[3DAD2BFF]Crowded Mod v3.3 by Przebot#2448 \nForked from andry08";
 			}
 		}
 	}
