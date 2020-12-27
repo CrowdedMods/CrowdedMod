@@ -10,7 +10,9 @@ using GameData = EGLJNOMOGNP;
 using PlayerInfo = EGLJNOMOGNP.DCJMABDDJCF;
 using Effects = MFGGDFBIKLF;
 using VersionShower = BOCOFLHKCOJ;
+using PingTracker = ELDIDNABIPI;
 using AmongUsClient = FMLLKEACGIO;
+using BepInEx.Logging;
 
 namespace CrowdedMod {
 	class MeetingHudPatches {
@@ -184,7 +186,16 @@ namespace CrowdedMod {
 		{
 			public static void Postfix(VersionShower __instance)
 			{
-				__instance.text.Text = "Among Us " + __instance.text.Text + " \n[3DAD2BFF]Crowded Mod v3.3 by Przebot#2448 \nForked from andry08";
+				__instance.text.Text = "Among Us " + __instance.text.Text + " \n[3DAD2BFF]Crowded Mod v3.4 by Przebot#2448 \nForked from andry08";
+			}
+		}
+		
+		[HarmonyPatch(typeof(PingTracker), "Update")]
+		public static class PingShowerPatch
+		{
+			public static void Postfix(PingTracker __instance)
+			{
+				__instance.text.Text =  __instance.text.Text + "\n[FFB793FF]> CrowdedMod <";
 			}
 		}
 	}
