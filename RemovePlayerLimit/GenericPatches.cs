@@ -13,12 +13,20 @@ using ServerManager = AOBNFCIHAJL;
 using ObjectPoolBehavior = FJBFFDFFBFO;
 using PassiveButton = HHMBANDDIOA;
 using KeyMinigame = AMKEIECODLC;
+using VersionShower = BOCOFLHKCOJ;
+using PingTracker = ELDIDNABIPI;
 
 namespace CrowdedMod {
-	class GenericPatches {
+	static class GenericPatches {
         static RegionInfo[] _defaultRegions = new RegionInfo[3];
-
+        public static ServersParser.ParseResult parseStatus;
         static bool _firstRun = true;
+        static readonly Dictionary<ServersParser.ParseResult, string> parseErrorMessages = new Dictionary<ServersParser.ParseResult, string>()
+        {
+            { ServersParser.ParseResult.Comment, "[FF0000FF]`servers.txt` Successfully loaded,\nbut no servers found there" },
+            { ServersParser.ParseResult.FileNotFound, "[FF0000FF]`servers.txt` not found\n(has to be in Among Us directory)" },
+            { ServersParser.ParseResult.InvalidData, "[FF0000FF]Invalid `servers.txt` data\nSee https://github.com/CrowdedMods/CrowdedMod/wiki/servers.txt" }
+        };
 
         [HarmonyPatch(typeof(GameData), nameof(GameData.GetAvailableId))]
 		public static class GameDataAvailableIdPatch {
@@ -120,6 +128,28 @@ namespace CrowdedMod {
             {
                 PlayerControl localPlayer = PlayerControl.LocalPlayer;
                 __instance.ECHAPHLBHDC = (int)((localPlayer != null) ? localPlayer.PlayerId % 10 : 0);
+            }
+        }
+
+        [HarmonyPatch(typeof(VersionShower), "Start")]
+        public static class VersionShowerPatch
+        {
+            public static void Postfix(VersionShower __instance)
+            {
+                __instance.text.Text = "Among Us " + __instance.text.Text + " \n[3DAD2BFF]Crowded Mod v3.4 by Przebot#2448 \nForked from andry08";
+                if(parseStatus != ServersParser.ParseResult.Success)
+                {
+                    __instance.text.Text += $"\n\n{parseErrorMessages[parseStatus]}";
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(PingTracker), "Update")]
+        public static class PingShowerPatch
+        {
+            public static void Postfix(PingTracker __instance)
+            {
+                __instance.text.Text += "\n[FFB793FF]> CrowdedMod <";
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Il2CppSystem.IO;
 
@@ -6,6 +7,13 @@ namespace CrowdedMod
 {
     public static class ServersParser
     {
+        public enum ParseResult : byte
+        {
+            Success = 0,
+            Comment = 1,
+            FileNotFound = 2,
+            InvalidData = 3
+        }
         private static ushort DefaultPort = 22023;
         public static List<CustomServerInfo> servers = new List<CustomServerInfo>();
         /// <summary>
@@ -14,29 +22,45 @@ namespace CrowdedMod
         public static void Parse()
         {
             servers.Clear(); // clear if reparsing
-
-            StreamReader r = File.OpenText("servers.txt"); 
-            // no try catch here since i think its error message is clear enough
+            StreamReader r;
+            try
+            {
+                r = File.OpenText("servers.txt");
+            } catch (Exception e)
+            {
+                RemovePlayerLimitPlugin.Logger.LogError(e);
+                GenericPatches.parseStatus = ParseResult.FileNotFound;
+                return;
+            }
             string line;
+            bool noServers = true;
             while((line = r.ReadLine()) != null)
             {
-                if (ParseLine(line, out var s))
+                var result = ParseLine(line, out var s);
+                if (result == ParseResult.Success)
                 {
+                    noServers = false;
                     servers.Add(s);
+                } else if (result != ParseResult.Comment)
+                {
+                    GenericPatches.parseStatus = result;
+                    noServers = false;
+                    break;
                 }
             }
+            if (noServers) GenericPatches.parseStatus = ParseResult.Comment;
         }
         /// <summary>
         /// Parses a server line. Throws <see cref="System.Exception"/> if wrong data has been provided
         /// </summary>
         /// <param name="line">Line to parse</param>
         /// <param name="server">Parsed <see cref="CustomServerInfo"/>. <see langword="null"/> if line is a comment</param>
-        /// <returns>False if line is a comment, otherwise true</returns>
-        static private bool ParseLine(string line, out CustomServerInfo server)
+        /// <returns><see cref="ParseResult"/></returns>
+        static private ParseResult ParseLine(string line, out CustomServerInfo server)
         {
             server = null;
             line = line.Trim();
-            if (line.StartsWith("#")) return false;
+            if (line.StartsWith("#")) return ParseResult.Comment;
             try
             {
                 string name;
@@ -61,9 +85,10 @@ namespace CrowdedMod
                 server = new CustomServerInfo(name, ipdata[0], port);
             } catch
             {
-                throw new System.Exception("Invalid `servers.txt` data. See https://pastebin.com/GsusE0Wh as an example");
+                RemovePlayerLimitPlugin.Logger.LogError("Invalid `servers.txt` data. See https://github.com/CrowdedMods/CrowdedMod/wiki/servers.txt");
+                return ParseResult.InvalidData;
             }
-            return true;
+            return ParseResult.Success;
         }
     }
 }
