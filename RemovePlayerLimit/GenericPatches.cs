@@ -124,10 +124,12 @@ namespace CrowdedMod {
         [HarmonyPatch(typeof(KeyMinigame),nameof(KeyMinigame.Start))]
         public static class KeyMinigamePatch
         {
-            public static void Postfix(ref KeyMinigame __instance)
+            public static bool Prefix(ref KeyMinigame __instance)
             {
                 PlayerControl localPlayer = PlayerControl.LocalPlayer;
-                __instance.ECHAPHLBHDC = (int)((localPlayer != null) ? localPlayer.PlayerId % 10 : 0);
+                __instance.ECHAPHLBHDC = (localPlayer != null) ? localPlayer.PlayerId % 10 : 0;
+                __instance.Slots[__instance.ECHAPHLBHDC].CIAMDNLJPBO();
+                return false;
             }
         }
 
