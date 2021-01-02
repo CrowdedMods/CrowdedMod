@@ -4,11 +4,14 @@ using System;
 using System.Linq;
 using Hazel;
 using PlayerControl = FFGALNAPKCD;
+using PlayerTask = PILBGHDHJLH;
 using VitalsMinigame = JOFALPIHHOI;
 using VitalsPanel = KMDJIBIMJIH;
+using Palette = LOCPGOACAJF;
+using HudOverrideTask = LFOILEODBMA;
 
 namespace CrowdedMod {
-	class VitalsPatches
+	internal static class VitalsPatches
 	{
 		static int currentPage = 0;
 		static int maxPerPage = 10;
@@ -19,12 +22,11 @@ namespace CrowdedMod {
 		[HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Begin))]
 		public static class VitalsGuiPatchBegin
 		{
-			static string[] colors = { "RED", "BLUE", "GRN", "PINK", "ORNG", "YLOW", "BLAK", "WHTE", "PURP", "BRWN", "CYAN", "LIME"};
 			public static void Postfix(VitalsMinigame __instance)
 			{
 				//Fix the name of each player (better multi color handling)
 				VitalsPanel[] vitalsPanels = __instance.MILGJPIGONF;
-				foreach (string color in colors)
+				foreach (string color in Palette.OKIPHGGAPMH)//Palette.ShortColorNames
 				{
 					VitalsPanel[] colorFiltered = vitalsPanels.Where(panel => panel.Text.Text.Equals(color)).ToArray();
 					if (colorFiltered.Length <= 1)
@@ -42,7 +44,9 @@ namespace CrowdedMod {
 		public static class VitalsGuiPatchUpdate
 		{
 			public static void Postfix(VitalsMinigame __instance)
-			{
+            {
+                if (PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(PlayerControl.LocalPlayer))
+                    return;
 				//Allow to switch pages
 				if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.mouseScrollDelta.y > 0f)
 					currentPage = Mathf.Clamp(currentPage - 1, 0, maxPages - 1);
