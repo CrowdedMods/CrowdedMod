@@ -9,7 +9,7 @@ By itself this mod doesn't allow to choose more than 10 players or more than 3 i
 You will have to change those values by other means (using memory editing or for example [All Of Us Impostor plugin](https://github.com/XtraCube/AllOfUsBot))
 
 ## Installation
-Not avaliable yet. SOON™
+See: [client installation](https://github.com/CrowdedMods/CrowdedMod/wiki/Client-Installation)
 
 ## Credits
 - [andry08/100-player-mod](https://github.com/andry08/100-player-mod) - Original author of this plugin. RayanTheBest/100-player-mod was a mirror of this, now we have an official link.
