@@ -4,7 +4,7 @@ using HarmonyLib;
 using System.Linq;
 using System.Reflection;
 namespace CrowdedMod {
-    [BepInPlugin("pl.przebor.crowded", "Crowded Mod", "3.5")]
+    [BepInPlugin("pl.przebor.crowded", "Crowded Mod", "3.6")]
     public class RemovePlayerLimitPlugin : BasePlugin {
 
         static internal BepInEx.Logging.ManualLogSource Logger;
