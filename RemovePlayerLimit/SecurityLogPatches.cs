@@ -5,7 +5,7 @@ namespace CrowdedMod
 {
     class SecurityLogPatches
     {
-        [HarmonyPatch(typeof(SecurityLogger), MethodType.Constructor)]
+        [HarmonyPatch(typeof(SecurityLogger), nameof(SecurityLogger.Awake))]
         public static class SecurityLoggerPatch
         {
             public static void Postfix(ref SecurityLogger __instance)
