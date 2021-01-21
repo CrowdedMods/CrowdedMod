@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using HarmonyLib;
-using System;
 using System.Linq;
-using Hazel;
+
 using PlayerControl = FFGALNAPKCD;
 using PlayerTask = PILBGHDHJLH;
 using VitalsMinigame = JOFALPIHHOI;
@@ -10,15 +9,13 @@ using VitalsPanel = KMDJIBIMJIH;
 using Palette = LOCPGOACAJF;
 using HudOverrideTask = LFOILEODBMA;
 
-namespace CrowdedMod {
+namespace CrowdedMod.Patches {
 	internal static class VitalsPatches
 	{
 		static int currentPage = 0;
-		static int maxPerPage = 10;
-		static int maxPages
-		{
-			get => (int)Mathf.Ceil(PlayerControl.AllPlayerControls.Count / (float)maxPerPage);
-		}
+		const int maxPerPage = 10;
+		static int maxPages => (int)Mathf.Ceil((float)PlayerControl.AllPlayerControls.Count / maxPerPage);
+
 		[HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Begin))]
 		public static class VitalsGuiPatchBegin
 		{
@@ -34,7 +31,7 @@ namespace CrowdedMod {
 					int i = 1;
 					foreach (VitalsPanel panel in colorFiltered)
                     {
-						panel.Text.Text = panel.Text.Text + i;
+						panel.Text.Text += i;
 						i++;
 					}
 				}
@@ -53,7 +50,7 @@ namespace CrowdedMod {
 				else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.mouseScrollDelta.y < 0f)
 					currentPage = Mathf.Clamp(currentPage + 1, 0, maxPages - 1);
 
-				//Place dead players at the begining, disconnected at the end
+				//Place dead players at the beginning, disconnected at the end
 				VitalsPanel[] vitalsPanels = __instance.MILGJPIGONF.OrderBy(x => (x.IsDead ? 0 : 1) + (x.IsDiscon ? 2 : 0)).ToArray();//VitalsPanel[] //Sorted by: Dead -> Alive -> dead&disc -> alive&disc
 				int i = 0;
 
@@ -64,7 +61,7 @@ namespace CrowdedMod {
 					{
 						panel.gameObject.SetActive(true);
 						int relativeIndex = i % maxPerPage;
-						// /!\ -2.7f hardcoded, can we get it the same way as MeetinHud.VoteOrigin ?
+						// /!\ -2.7f hardcoded, can we get it the same way as MeetingHud.VoteOrigin ?
 						panel.transform.localPosition = new Vector3(-2.7f + 0.6f * relativeIndex, panel.transform.localPosition.y, panel.transform.localPosition.z);
 					}
 					else
