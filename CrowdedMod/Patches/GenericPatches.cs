@@ -5,8 +5,6 @@ using PlayerTab = MAOILGPNFND;
 using GameData = EGLJNOMOGNP;
 using Palette = LOCPGOACAJF;
 using PingTracker = ELDIDNABIPI;
-using KillAnimation = MNGKAKKOKPN;
-using SoundManager = POIDGKLMIMP;
 
 namespace CrowdedMod.Patches {
 	static class GenericPatches {
