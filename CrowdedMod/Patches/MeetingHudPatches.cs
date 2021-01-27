@@ -39,7 +39,7 @@ namespace CrowdedMod.Patches {
 						button.transform.localPosition = __instance.VoteOrigin +
 						                                 new Vector3(
 							                                 __instance.VoteButtonOffsets.x * (relativeIndex % 2),
-							                                 __instance.VoteButtonOffsets.y * ((float)relativeIndex / 2), 
+							                                 __instance.VoteButtonOffsets.y * (relativeIndex / 2), 
 							                                 -1f
 							                             );
 					} else
