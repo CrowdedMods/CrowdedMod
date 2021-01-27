@@ -16,7 +16,7 @@ namespace CrowdedMod.Patches {
 	static class MeetingHudPatches {
 		static string lastTimerText;
 		static int currentPage = 0;
-		static int maxPages => (int)Mathf.Ceil(PlayerControl.AllPlayerControls.Count / 10f);
+		static int maxPages => (int)Mathf.Ceil(GameData.Instance.AllPlayers.Count / 10f);
 
 		[HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
 		static class VoteGuiPatch {
