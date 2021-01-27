@@ -12,7 +12,7 @@ namespace CrowdedMod.Patches {
         [HarmonyPatch(typeof(GameData), nameof(GameData.GetAvailableId))]
 		static class GameDataAvailableIdPatch {
 			public static bool Prefix(ref GameData __instance, out sbyte __result) {
-				for (sbyte i = 0; i <= 127; i++)
+				for (sbyte i = 0; i < 15; i++)
 					if (checkId(__instance, i)) {
 						__result = i;
 						return false;
