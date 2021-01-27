@@ -351,5 +351,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-Libs/
+Libs/*.dll
 RemovePlayerLimit/RemovePlayerLimit.csproj
