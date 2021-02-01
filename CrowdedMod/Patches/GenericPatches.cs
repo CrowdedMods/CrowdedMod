@@ -50,11 +50,10 @@ namespace CrowdedMod.Patches {
 		[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.GetSpawnLocation))]
         	public static class ShipStatusGetSpawnLocationPatch
 		{
-		    public static bool Prefix(ShipStatus __instance, [HarmonyArgument(0)] ref int playerId, [HarmonyArgument(1)] ref int numPlayer, [HarmonyArgument(2)] bool initialSpawn)
+		    public static void Prefix(ShipStatus __instance, [HarmonyArgument(0)] ref int playerId, [HarmonyArgument(1)] ref int numPlayer)
 		    {
 			playerId %= 10;
-			if (numPlayer >= 10) numPlayer = 10;
-			return true;
+			if (numPlayer > 10) numPlayer = 10;
 		    }
 		}
 	
