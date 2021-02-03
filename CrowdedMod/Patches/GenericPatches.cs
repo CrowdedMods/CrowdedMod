@@ -5,6 +5,7 @@ using PlayerTab = MAOILGPNFND;
 using GameData = EGLJNOMOGNP;
 using Palette = LOCPGOACAJF;
 using PingTracker = ELDIDNABIPI;
+using ShipStatus = HLBNNHFCNAJ;
 
 namespace CrowdedMod.Patches {
 	static class GenericPatches {
