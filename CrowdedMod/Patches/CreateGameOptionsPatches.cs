@@ -15,7 +15,7 @@ namespace CrowdedMod.Patches
     public static class CreateGameOptionsPatches
     {
         [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.Start))]
-        static class CreateOptionsPicker_Start
+        public static class CreateOptionsPicker_Start // Credits to XtraCube (mostly)
         {
 	        public const byte maxPlayers = 127;
 	        

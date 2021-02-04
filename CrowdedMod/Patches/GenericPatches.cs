@@ -75,7 +75,7 @@ namespace CrowdedMod.Patches {
         }
 
         [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.OnEnable))]
-        static class GameSettingMenu_OnEnable
+        static class GameSettingMenu_OnEnable // Credits to https://github.com/Galster-dev/GameSettingsUnlocker
         {
 	        static void Prefix(ref GameSettingMenu __instance)
 	        {
@@ -90,7 +90,7 @@ namespace CrowdedMod.Patches {
 	        {
 		        __instance.GetComponentsInChildren<NumberOption>()
 			        .First(o => o.Title == StringNames.GameNumImpostors)
-			        .ValidRange = new FloatRange(1, 63);
+			        .ValidRange = new FloatRange(1, (int)(CreateGameOptionsPatches.CreateOptionsPicker_Start.maxPlayers-0.5f)/2);
 	        }
         }
     }
