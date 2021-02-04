@@ -23,7 +23,7 @@ namespace CrowdedMod {
 
             // GameOptionsData.RecommendedImpostors
             // to avoid IndexOutOfRangeException(s)
-            KMOGFLPJLLK.EICIGKMJIMF = KMOGFLPJLLK.MGGHFLMODBE = Enumerable.Repeat(127, 127).ToArray();
+            KMOGFLPJLLK.EICIGKMJIMF = KMOGFLPJLLK.MGGHFLMODBE = Enumerable.Repeat(15, 15).ToArray();
             KMOGFLPJLLK.GGJLPJPNONM = Enumerable.Repeat(4, 127).ToArray();
             Harmony.PatchAll();
         }

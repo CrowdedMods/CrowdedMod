@@ -12,7 +12,7 @@ namespace CrowdedMod.Patches
         {
             public static void Postfix(ref SecurityLogger __instance)
             {
-                __instance.KJGAJKDMDHJ = new float[127]; // Timers
+                __instance.KJGAJKDMDHJ = new float[15]; // Timers
             }
         }
 

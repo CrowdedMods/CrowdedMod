@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Patches\CreateGameOptionsPatches.cs" />
+    <Compile Include="Patches\GameOptionsPatches.cs" />
     <Compile Include="Patches\GenericPatches.cs" />
     <Compile Include="Patches\MeetingHudPatches.cs" />
     <Compile Include="Patches\MiniGamePatches.cs" />
