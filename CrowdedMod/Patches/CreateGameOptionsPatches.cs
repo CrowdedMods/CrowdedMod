@@ -9,6 +9,7 @@ using TextRenderer = AELDHKGBIFD;
 using PassiveButton = HHMBANDDIOA;
 using SaveManager = IANFCOGHJMJ;
 using GameOptionsData = KMOGFLPJLLK;
+using SettingsMode = JDJOCPGLLDO;
 
 namespace CrowdedMod.Patches
 {
@@ -20,7 +21,8 @@ namespace CrowdedMod.Patches
 	        public const byte maxPlayers = 127;
 	        
             static void Postfix(CreateOptionsPicker __instance)
-			{
+            {
+	            if (__instance.mode != SettingsMode.Host) return;
                 var offset = __instance.MaxPlayerButtons[1].transform.position.x - __instance.MaxPlayerButtons[0].transform.position.x;
 
                 #region MaxPlayers stuff

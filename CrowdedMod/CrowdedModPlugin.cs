@@ -8,7 +8,7 @@ namespace CrowdedMod {
     public class CrowdedModPlugin : BasePlugin
     {
         const string Id = "pl.przebor.crowded";
-        private const string Version = "2.0.1";
+        private const string Version = "2.1.1";
         
 #if DEBUG
         // internal to use this in other classes (not required to release)
