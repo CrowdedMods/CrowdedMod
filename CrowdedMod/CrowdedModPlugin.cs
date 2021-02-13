@@ -8,7 +8,7 @@ namespace CrowdedMod {
     public class CrowdedModPlugin : BasePlugin
     {
         const string Id = "pl.przebor.crowded";
-        private const string Version = "2.0.1";
+        private const string Version = "2.1.1";
         
 #if DEBUG
         // internal to use this in other classes (not required to release)
@@ -23,7 +23,8 @@ namespace CrowdedMod {
 
             // GameOptionsData.RecommendedImpostors
             // to avoid IndexOutOfRangeException(s)
-            KMOGFLPJLLK.EICIGKMJIMF = KMOGFLPJLLK.MGGHFLMODBE = Enumerable.Repeat<int>(127, 127).ToArray<int>();
+            KMOGFLPJLLK.EICIGKMJIMF = KMOGFLPJLLK.MGGHFLMODBE = Enumerable.Repeat(127, 127).ToArray();
+            KMOGFLPJLLK.GGJLPJPNONM = Enumerable.Repeat(4, 127).ToArray();
             Harmony.PatchAll();
         }
     }

@@ -1,4 +1,7 @@
-﻿using HarmonyLib;
+﻿using System.Linq;
+using HarmonyLib;
+using UnhollowerBaseLib;
+using UnityEngine;
 
 using PlayerControl = FFGALNAPKCD;
 using PlayerTab = MAOILGPNFND;
@@ -6,6 +9,9 @@ using GameData = EGLJNOMOGNP;
 using Palette = LOCPGOACAJF;
 using PingTracker = ELDIDNABIPI;
 using ShipStatus = HLBNNHFCNAJ;
+using GameSettingMenu = JCLABFFHPEO;
+using GameOptionsMenu = PHCKLDDNJNP;
+using NumberOption = PCGDGFIAJJI;
 
 namespace CrowdedMod.Patches {
 	static class GenericPatches {
@@ -66,6 +72,26 @@ namespace CrowdedMod.Patches {
             {
                 __instance.text.Text += "\n[FFB793FF]> CrowdedMod <";
             }
+        }
+
+        [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.OnEnable))]
+        static class GameSettingMenu_OnEnable // Credits to https://github.com/Galster-dev/GameSettingsUnlocker
+        {
+	        static void Prefix(ref GameSettingMenu __instance)
+	        {
+		        __instance.HideForOnline = new Il2CppReferenceArray<Transform>(0);
+	        }
+        }
+
+        [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
+        static class GameOptionsMenu_Start
+        {
+	        static void Postfix(ref GameOptionsMenu __instance)
+	        {
+		        __instance.GetComponentsInChildren<NumberOption>()
+			        .First(o => o.Title == StringNames.GameNumImpostors)
+			        .ValidRange = new FloatRange(1, (int)(CreateGameOptionsPatches.CreateOptionsPicker_Start.maxPlayers-0.5f)/2);
+	        }
         }
     }
 }
