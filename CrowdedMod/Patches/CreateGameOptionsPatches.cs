@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace CrowdedMod.Patches
 {
-    public static class CreateGameOptionsPatches
+    internal static class CreateGameOptionsPatches
     {
         [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.Start))]
         public static class CreateOptionsPicker_Start // Credits to XtraCube (mostly)

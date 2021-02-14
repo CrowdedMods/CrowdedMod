@@ -2,7 +2,7 @@
 
 namespace CrowdedMod.Patches
 {
-    static class MiniGamePatches
+    internal static class MiniGamePatches
     {
         [HarmonyPatch(typeof(SecurityLogger), nameof(SecurityLogger.Awake))]
         public static class SecurityLoggerPatch

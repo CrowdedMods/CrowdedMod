@@ -5,7 +5,8 @@ using Hazel;
 
 
 namespace CrowdedMod.Patches {
-	static class MeetingHudPatches {
+	internal static class MeetingHudPatches 
+	{
 		static string lastTimerText;
 		static int currentPage = 0;
 		static int maxPages => (int)Mathf.Ceil(GameData.Instance.AllPlayers.Count / 10f);

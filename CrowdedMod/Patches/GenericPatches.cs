@@ -4,10 +4,10 @@ using UnhollowerBaseLib;
 using UnityEngine;
 
 namespace CrowdedMod.Patches {
-	static class GenericPatches {
+	internal static class GenericPatches {
 		// patched because 10 is hardcoded in `for` loop
         [HarmonyPatch(typeof(GameData), nameof(GameData.GetAvailableId))]
-		static class GameDataAvailableIdPatch {
+		public static class GameDataAvailableIdPatch {
 			public static bool Prefix(ref GameData __instance, out sbyte __result) {
 				for (sbyte i = 0; i <= 127; i++)
 					if (checkId(__instance, i)) {
@@ -27,7 +27,7 @@ namespace CrowdedMod.Patches {
 		}
 
 		[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor), typeof(byte))]
-		static class PlayerControlCheckColorPatch {
+		public static class PlayerControlCheckColorPatch {
 			public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] byte colorId) {
 				__instance.RpcSetColor(colorId);
 				return false;
@@ -35,7 +35,7 @@ namespace CrowdedMod.Patches {
 		}
 
 		[HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.UpdateAvailableColors))]
-		static class PlayerTabUpdateAvailableColorsPatch {
+		public static class PlayerTabUpdateAvailableColorsPatch {
 			public static bool Prefix(PlayerTab __instance) {
 				PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer._cachedData.ColorId, __instance.DemoImage);
 				for (int i = 0; i < Palette.PlayerColors.Length; i++)
@@ -45,7 +45,7 @@ namespace CrowdedMod.Patches {
 		}
 		
 		[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.GetSpawnLocation))]
-        	public static class ShipStatusGetSpawnLocationPatch
+		public static class ShipStatusGetSpawnLocationPatch
 		{
 		    public static void Prefix(ShipStatus __instance, [HarmonyArgument(0)] ref int playerId, [HarmonyArgument(1)] ref int numPlayer)
 		    {
@@ -53,9 +53,8 @@ namespace CrowdedMod.Patches {
 			if (numPlayer > 10) numPlayer = 10;
 		    }
 		}
-	
-        [HarmonyPriority(Priority.VeryHigh)] // to show this message first, or be overrided if any plugins do
-        [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
+            
+		[HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
         static class PingShowerPatch
         {
             public static void Postfix(PingTracker __instance)
