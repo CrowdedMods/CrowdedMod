@@ -101,29 +101,16 @@ namespace CrowdedMod.Patches {
 		[HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.HandleRpc), typeof(byte), typeof(MessageReader))]
 		static class MeetingHudHandleRpcPatch {
 			static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)] byte callId, [HarmonyArgument(1)] MessageReader reader) {
-				switch (callId) {
-					case 22:
-						__instance.Close();
-						break;
-					case 23: {
-						byte[] states = reader.ReadBytesAndSize();
-						byte[] votes = reader.ReadBytesAndSize();
-						GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(reader.ReadByte());
-						bool tie = reader.ReadBoolean();
-						VotingComplete(__instance, states, votes, playerById, tie);
-						break;
-					}
-					case 24: {
-						byte srcPlayerId = reader.ReadByte();
-						sbyte suspectPlayerId = reader.ReadSByte();
-						__instance.CastVote(srcPlayerId, suspectPlayerId);
-						break;
-					}
-					case 25:
-						__instance.ClearVote();
-						break;
+				if (callId == 23)
+				{
+					byte[] states = reader.ReadBytesAndSize();
+					byte[] votes = reader.ReadBytesAndSize();
+					GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(reader.ReadByte());
+					bool tie = reader.ReadBoolean();
+					VotingComplete(__instance, states, votes, playerById, tie);
+					return false;
 				}
-				return false;
+				return true;
 			}
 
 			public static void VotingComplete(MeetingHud __instance, byte[] states, byte[] votes, GameData.PlayerInfo exiled, bool tie) {
