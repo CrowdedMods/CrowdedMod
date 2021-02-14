@@ -2,12 +2,7 @@
 using HarmonyLib;
 using System.Linq;
 
-using PlayerControl = FFGALNAPKCD;
-using PlayerTask = PILBGHDHJLH;
-using VitalsMinigame = JOFALPIHHOI;
-using VitalsPanel = KMDJIBIMJIH;
-using Palette = LOCPGOACAJF;
-using HudOverrideTask = LFOILEODBMA;
+//using HudOverrideTask = LFOILEODBMA;
 
 namespace CrowdedMod.Patches {
 	internal static class VitalsPatches
@@ -22,8 +17,8 @@ namespace CrowdedMod.Patches {
 			public static void Postfix(VitalsMinigame __instance)
 			{
 				//Fix the name of each player (better multi color handling)
-				VitalsPanel[] vitalsPanels = __instance.MILGJPIGONF;
-				foreach (string color in Palette.OKIPHGGAPMH)//Palette.ShortColorNames
+				VitalsPanel[] vitalsPanels = __instance.vitals;
+				foreach (string color in Palette.ShortColorNames)
 				{
 					VitalsPanel[] colorFiltered = vitalsPanels.Where(panel => panel.Text.Text.Equals(color)).ToArray();
 					if (colorFiltered.Length <= 1)
@@ -51,7 +46,7 @@ namespace CrowdedMod.Patches {
 					currentPage = Mathf.Clamp(currentPage + 1, 0, maxPages - 1);
 
 				//Place dead players at the beginning, disconnected at the end
-				VitalsPanel[] vitalsPanels = __instance.MILGJPIGONF.OrderBy(x => (x.IsDead ? 0 : 1) + (x.IsDiscon ? 2 : 0)).ToArray();//VitalsPanel[] //Sorted by: Dead -> Alive -> dead&disc -> alive&disc
+				VitalsPanel[] vitalsPanels = __instance.vitals.OrderBy(x => (x.IsDead ? 0 : 1) + (x.IsDiscon ? 2 : 0)).ToArray();//VitalsPanel[] //Sorted by: Dead -> Alive -> dead&disc -> alive&disc
 				int i = 0;
 
 				//Show/hide/move each panel

@@ -4,13 +4,6 @@ using HarmonyLib;
 using UnityEngine;
 using UnityEngine.Events;
 
-using CreateOptionsPicker = PEOBBDIGAEP;
-using TextRenderer = AELDHKGBIFD;
-using PassiveButton = HHMBANDDIOA;
-using SaveManager = IANFCOGHJMJ;
-using GameOptionsData = KMOGFLPJLLK;
-using SettingsMode = JDJOCPGLLDO;
-
 namespace CrowdedMod.Patches
 {
     public static class CreateGameOptionsPatches
@@ -49,7 +42,7 @@ namespace CrowdedMod.Patches
 							button.GetComponentInChildren<TextRenderer>().Text = 
 								(byte.Parse(button.name) + delta).ToString();
 					}
-					__instance.SetMaxPlayersButtons(__instance.GetTargetOptions().NCJGOCGPJDO); // MaxPlayers
+					__instance.SetMaxPlayersButtons(__instance.GetTargetOptions().MaxPlayers);
 				}
 				
 				SpriteRenderer minusButton = Object.Instantiate(playerButtons.Last(), playerButtons.Last().transform.parent);
@@ -72,7 +65,7 @@ namespace CrowdedMod.Patches
 							button.GetComponentInChildren<TextRenderer>().Text = 
 								(byte.Parse(button.name) - delta).ToString();
 					}
-					__instance.SetMaxPlayersButtons(__instance.GetTargetOptions().NCJGOCGPJDO); // MaxPlayers
+					__instance.SetMaxPlayersButtons(__instance.GetTargetOptions().MaxPlayers);
 				}
 				
 				playerButtons.ForEach(b =>
@@ -83,10 +76,10 @@ namespace CrowdedMod.Patches
 					{
 						byte value = byte.Parse(button.name);
 						var targetOptions = __instance.GetTargetOptions();
-						if (value <= targetOptions.KDEGPDECMHF) // NumImpostors
+						if (value <= targetOptions.NumImpostors)
 						{
-							targetOptions.KDEGPDECMHF = value - 1;
-							__instance.KLOCOAAHFIK(targetOptions.KDEGPDECMHF); // UpdateImpostorButtons
+							targetOptions.NumImpostors = value - 1;
+							__instance.Method_64(targetOptions.NumImpostors); // UpdateImpostorButtons
 						}
 						__instance.SetMaxPlayersButtons(value);
 					} 
@@ -119,7 +112,7 @@ namespace CrowdedMod.Patches
 					void defaultListener()
 					{
 						byte value = byte.Parse(button.name);
-						if (value >= __instance.GetTargetOptions().NCJGOCGPJDO) // MaxPlayers
+						if (value >= __instance.GetTargetOptions().MaxPlayers)
 						{
 							return;
 						}
@@ -129,25 +122,25 @@ namespace CrowdedMod.Patches
 				});
 
 				__instance.ImpostorButtons = impostorButtons.ToArray();
-				__instance.SetImpostorButtons(__instance.GetTargetOptions().KDEGPDECMHF); // NumImpostors
+				__instance.SetImpostorButtons(__instance.GetTargetOptions().NumImpostors);
 				
 				#endregion
 			}
         }
 
-        [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.BIHDGEGKOJA), MethodType.Getter)] // GameHostOptions
+        [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.GameHostOptions), MethodType.Getter)]
         static class SaveManager_get_GameHostOptions
         {
 	        static bool Prefix(out GameOptionsData __result)
 	        {
-		        SaveManager.HKDBOGPNPGB ??= SaveManager.LAAHCBEDLPD("gameHostOptions");
+		        SaveManager.hostOptionsData ??= SaveManager.Method_47("gameHostOptions");
 
 		        // patched because of impostor clamping
-		        SaveManager.HKDBOGPNPGB.KDEGPDECMHF = 
-			        Mathf.Clamp(SaveManager.HKDBOGPNPGB.KDEGPDECMHF, 1, SaveManager.HKDBOGPNPGB.NCJGOCGPJDO - 1); // NumImpostors = Clamp(1, MaxPlayers-1)
-		        SaveManager.HKDBOGPNPGB.DLIBONBKPKL = Mathf.Clamp(SaveManager.HKDBOGPNPGB.DLIBONBKPKL, 0, 2); // KillDistance
+		        SaveManager.hostOptionsData.NumImpostors = 
+			        Mathf.Clamp(SaveManager.hostOptionsData.NumImpostors, 1, SaveManager.hostOptionsData.MaxPlayers - 1);
+		        SaveManager.hostOptionsData.KillDistance = Mathf.Clamp(SaveManager.hostOptionsData.KillDistance, 0, 2);
 
-		        __result = SaveManager.HKDBOGPNPGB;
+		        __result = SaveManager.hostOptionsData;
 		        return false;
 	        }
         }

@@ -1,7 +1,4 @@
 ﻿using HarmonyLib;
-using KeyMinigame = AMKEIECODLC;
-using PlayerControl = FFGALNAPKCD;
-using SecurityLogger = MAOCFFOEGFE;
 
 namespace CrowdedMod.Patches
 {
@@ -12,7 +9,7 @@ namespace CrowdedMod.Patches
         {
             public static void Postfix(ref SecurityLogger __instance)
             {
-                __instance.KJGAJKDMDHJ = new float[127]; // Timers
+                __instance.Timers = new float[127];
             }
         }
 
@@ -22,8 +19,8 @@ namespace CrowdedMod.Patches
             public static bool Prefix(ref KeyMinigame __instance)
             {
                 var localPlayer = PlayerControl.LocalPlayer;
-                __instance.ECHAPHLBHDC = (localPlayer != null) ? localPlayer.PlayerId % 10 : 0;
-                __instance.Slots[__instance.ECHAPHLBHDC].CIAMDNLJPBO();
+                __instance.targetSlotId = (localPlayer != null) ? localPlayer.PlayerId % 10 : 0;
+                __instance.Slots[__instance.targetSlotId].Method_62(); // SetHighlight()
                 return false;
             }
         }

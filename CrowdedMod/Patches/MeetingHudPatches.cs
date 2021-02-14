@@ -3,14 +3,6 @@ using HarmonyLib;
 using System.Linq;
 using Hazel;
 
-using PlayerControl = FFGALNAPKCD;
-using MeetingHud = OOCJALPKPEP;
-using PlayerVoteArea = HDJGDMFCHDN;
-using Palette = LOCPGOACAJF;
-using GameData = EGLJNOMOGNP;
-using PlayerInfo = EGLJNOMOGNP.DCJMABDDJCF;
-using Effects = MFGGDFBIKLF;
-using AmongUsClient = FMLLKEACGIO;
 
 namespace CrowdedMod.Patches {
 	static class MeetingHudPatches {
@@ -29,7 +21,7 @@ namespace CrowdedMod.Patches {
 				if (__instance.TimerText.Text != lastTimerText)
 					__instance.TimerText.Text = (lastTimerText = __instance.TimerText.Text + $" ({currentPage + 1}/{maxPages})");
 
-				PlayerVoteArea[] playerButtons = __instance.HBDFFAHBIGI.OrderBy(x => x.isDead).ToArray();
+				PlayerVoteArea[] playerButtons = __instance.playerStates.OrderBy(x => x.isDead).ToArray();
 				int i = 0;
 				foreach (PlayerVoteArea button in playerButtons) {
 					if (i >= currentPage * 10 && i < (currentPage + 1) * 10) {
@@ -49,22 +41,22 @@ namespace CrowdedMod.Patches {
 			}
 		}
 
-		[HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.IOCEGFONOOK))]
+		[HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Method_76))] // CheckForEndVoting()
 		static class MeetingHudCheckForEndVotingPatch {
 			public static bool Prefix(MeetingHud __instance) {
-				if (!__instance.HBDFFAHBIGI.All(ps => ps.isDead || ps.didVote)) return false;
-				byte[] self = calculateVotes(__instance.HBDFFAHBIGI);
+				if (!__instance.playerStates.All(ps => ps.isDead || ps.didVote)) return false;
+				byte[] self = calculateVotes(__instance.playerStates);
 
 				int maxIdx = indexOfMax(self, out bool tie) - 1;
-				PlayerInfo exiled = GameData.Instance.GetPlayerById((byte)maxIdx);
-				byte[] states = __instance.HBDFFAHBIGI.Select(s => s.GetState()).ToArray();
-				byte[] votes = __instance.HBDFFAHBIGI.Select(s => (byte)s.votedFor).ToArray();
-				if (AmongUsClient.Instance.BEIEANEKAFC)
+				GameData.PlayerInfo exiled = GameData.Instance.GetPlayerById((byte)maxIdx);
+				byte[] states = __instance.playerStates.Select(s => s.GetState()).ToArray();
+				byte[] votes = __instance.playerStates.Select(s => (byte)s.votedFor).ToArray();
+				if (AmongUsClient.Instance.AmHost)
 				{
 					MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(__instance.NetId, 23, SendOption.Reliable);
 					messageWriter.WriteBytesAndSize(states);
 					messageWriter.WriteBytesAndSize(votes); //Added because of the state's 4 bit vote id limit
-					messageWriter.Write(exiled?.JKOMCOJCAID ?? byte.MaxValue);
+					messageWriter.Write(exiled?.PlayerId ?? byte.MaxValue);
 					messageWriter.Write(tie);
 					messageWriter.EndMessage();
 				}
@@ -116,7 +108,7 @@ namespace CrowdedMod.Patches {
 					case 23: {
 						byte[] states = reader.ReadBytesAndSize();
 						byte[] votes = reader.ReadBytesAndSize();
-						PlayerInfo playerById = GameData.Instance.GetPlayerById(reader.ReadByte());
+						GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(reader.ReadByte());
 						bool tie = reader.ReadBoolean();
 						VotingComplete(__instance, states, votes, playerById, tie);
 						break;
@@ -134,49 +126,49 @@ namespace CrowdedMod.Patches {
 				return false;
 			}
 
-			public static void VotingComplete(MeetingHud __instance, byte[] states, byte[] votes, PlayerInfo exiled, bool tie) {
-				if (__instance.DCCFKHIPIOF == MeetingHud.BAMDJGFKOFP.Results) {
+			public static void VotingComplete(MeetingHud __instance, byte[] states, byte[] votes, GameData.PlayerInfo exiled, bool tie) {
+				if (__instance.state == MeetingHud.VoteStates.Results) {
 					return;
 				}
-				__instance.DCCFKHIPIOF = MeetingHud.BAMDJGFKOFP.Results;
-				__instance.EKGJAHLFJFP = __instance.discussionTimer;
-				__instance.LCJLLGKMINO = exiled;
-				__instance.GEJDOOANNJD = tie;
+				__instance.state = MeetingHud.VoteStates.Results;
+				__instance.resultsStartedAt = __instance.discussionTimer;
+				__instance.exiledPlayer = exiled;
+				__instance.wasTie = tie;
 				__instance.SkipVoteButton.gameObject.SetActive(false);
 				__instance.SkippedVoting.gameObject.SetActive(true);
 
 				PopulateResults(__instance, states, votes);
-				__instance.GOJIAJFHPIB();
+				__instance.Method_23(); // SetupProceedButton
 			}
 
 			static void PopulateResults(MeetingHud __instance, byte[] states, byte[] votes) {
 				__instance.TitleText.Text = "Voting Results";
 				int num = 0;
-				for (int i = 0; i < __instance.HBDFFAHBIGI.Length; i++) {
-					PlayerVoteArea playerVoteArea = __instance.HBDFFAHBIGI[i];
+				for (int i = 0; i < __instance.playerStates.Length; i++) {
+					PlayerVoteArea playerVoteArea = __instance.playerStates[i];
 					playerVoteArea.ClearForResults();
 					int num2 = 0;
 					for (int j = 0; j < states.Length; j++) {
 						if ((states[j] & 128) == 0) { //!isDead
-							PlayerInfo playerById = GameData.Instance.GetPlayerById((byte)__instance.HBDFFAHBIGI[j].HOBAOICNHFH);
+							GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById((byte)__instance.playerStates[j].TargetPlayerId);
 							int votedFor = (sbyte)votes[j];
 
 							SpriteRenderer spriteRenderer = Object.Instantiate(__instance.PlayerVotePrefab);
-							if (PlayerControl.GameOptions.AGGKAFILPGD)
-								PlayerControl.SetPlayerMaterialColors(Palette.ICNEJBPIBDB, spriteRenderer);
+							if (PlayerControl.GameOptions.AnonymousVotes)
+								PlayerControl.SetPlayerMaterialColors(Palette.DisabledGrey, spriteRenderer);
 							else
-								PlayerControl.SetPlayerMaterialColors(playerById.EHAHBDFODKC, spriteRenderer);
+								PlayerControl.SetPlayerMaterialColors(playerById.ColorId, spriteRenderer);
 							spriteRenderer.transform.localScale = Vector3.zero;
 
-							if (playerVoteArea.HOBAOICNHFH == votedFor) {
+							if (playerVoteArea.TargetPlayerId == votedFor) {
 								spriteRenderer.transform.SetParent(playerVoteArea.transform);
-								spriteRenderer.transform.localPosition = __instance.FGJMDFDIKEK + new Vector3(__instance.IOHLPLMJHIB.x * num2, 0f, 0f);
-								__instance.StartCoroutine(Effects.NJOHOOJGMBC(num2 * 0.5f, spriteRenderer.transform, 1f, 0.5f));
+								spriteRenderer.transform.localPosition = __instance.CounterOrigin + new Vector3(__instance.CounterOffsets.x * num2, 0f, 0f);
+								__instance.StartCoroutine(Effects.Bloop(num2 * 0.5f, spriteRenderer.transform, 1f, 0.5f));
 								num2++;
 							} else if (i == 0 && votedFor == -1) {
 								spriteRenderer.transform.SetParent(__instance.SkippedVoting.transform);
-								spriteRenderer.transform.localPosition = __instance.FGJMDFDIKEK + new Vector3(__instance.IOHLPLMJHIB.x * num, 0f, 0f);
-								__instance.StartCoroutine(Effects.NJOHOOJGMBC(num * 0.5f, spriteRenderer.transform, 1f, 0.5f));
+								spriteRenderer.transform.localPosition = __instance.CounterOrigin + new Vector3(__instance.CounterOffsets.x * num, 0f, 0f);
+								__instance.StartCoroutine(Effects.Bloop(num * 0.5f, spriteRenderer.transform, 1f, 0.5f));
 								num++;
 							}
 						}
