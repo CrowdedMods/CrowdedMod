@@ -3,7 +3,6 @@ using HarmonyLib;
 using System.Linq;
 using Hazel;
 
-
 namespace CrowdedMod.Patches {
     internal static class MeetingHudPatches 
     {

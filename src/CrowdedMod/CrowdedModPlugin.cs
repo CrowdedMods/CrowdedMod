@@ -16,8 +16,6 @@ namespace CrowdedMod {
 
         public override void Load()
         {
-            Harmony.PatchAll();
-            
             GameOptionsData.RecommendedImpostors = GameOptionsData.MaxImpostors = Enumerable.Repeat(127, 127).ToArray();
             GameOptionsData.MinPlayers = Enumerable.Repeat(4, 127).ToArray();
             
