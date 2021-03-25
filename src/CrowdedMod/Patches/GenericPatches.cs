@@ -44,15 +44,16 @@ namespace CrowdedMod.Patches {
             }
         }
         
-        [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.GetSpawnLocation))]
-        public static class ShipStatusGetSpawnLocationPatch
-        {
-            public static void Prefix(ShipStatus __instance, [HarmonyArgument(0)] ref int playerId, [HarmonyArgument(1)] ref int numPlayer)
-            {
-                playerId %= 10;
-                if (numPlayer > 10) numPlayer = 10;
-            }
-        }
+        // Got inlined in 2021.3.5s, hard to patch and not worth it
+        // [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.GetSpawnLocation))]
+        // public static class ShipStatusGetSpawnLocationPatch
+        // {
+        //     public static void Prefix(ShipStatus __instance, [HarmonyArgument(0)] ref int playerId, [HarmonyArgument(1)] ref int numPlayer)
+        //     {
+        //         playerId %= 10;
+        //         if (numPlayer > 10) numPlayer = 10;
+        //     }
+        // }
             
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
         static class PingShowerPatch

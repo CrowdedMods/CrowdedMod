@@ -20,7 +20,9 @@ namespace CrowdedMod.Patches
             {
                 var localPlayer = PlayerControl.LocalPlayer;
                 __instance.targetSlotId = (localPlayer != null) ? localPlayer.PlayerId % 10 : 0;
-                __instance.Slots[__instance.targetSlotId].Method_62(); // SetHighlight()
+                // Got inlined in 2021.3.5s
+                // __instance.Slots[__instance.targetSlotId].Method_62(); // SetHighlight()
+                __instance.Slots[__instance.targetSlotId].Image.sprite = __instance.Slots[__instance.targetSlotId].Highlit;
                 return false;
             }
         }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using HarmonyLib;
 using System.Linq;
 
@@ -18,9 +19,10 @@ namespace CrowdedMod.Patches {
             {
                 //Fix the name of each player (better multi color handling)
                 VitalsPanel[] vitalsPanels = __instance.vitals;
-                foreach (string color in Palette.ShortColorNames)
+                foreach (var color in Palette.ShortColorNames)
                 {
-                    VitalsPanel[] colorFiltered = vitalsPanels.Where(panel => panel.Text.Text.Equals(color)).ToArray();
+                    string colorString = TranslationController.Instance.GetString(color, Array.Empty<Il2CppSystem.Object>());
+                    VitalsPanel[] colorFiltered = vitalsPanels.Where(panel => panel.Text.Text.Equals(colorString)).ToArray();
                     if (colorFiltered.Length <= 1)
                         continue;
                     int i = 1;

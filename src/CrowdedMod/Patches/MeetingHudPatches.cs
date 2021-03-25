@@ -41,7 +41,7 @@ namespace CrowdedMod.Patches {
             }
         }
 
-        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Method_76))] // CheckForEndVoting()
+        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
         static class MeetingHudCheckForEndVotingPatch {
             public static bool Prefix(MeetingHud __instance) {
                 if (!__instance.playerStates.All(ps => ps.isDead || ps.didVote)) return false;
@@ -99,7 +99,7 @@ namespace CrowdedMod.Patches {
         }
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.HandleRpc), typeof(byte), typeof(MessageReader))]
-        static class MeetingHudHandleRpcPatch {
+        public static class MeetingHudHandleRpcPatch {
             static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)] byte callId, [HarmonyArgument(1)] MessageReader reader) {
                 if (callId == 23)
                 {
@@ -125,7 +125,7 @@ namespace CrowdedMod.Patches {
                 __instance.SkippedVoting.gameObject.SetActive(true);
 
                 PopulateResults(__instance, states, votes);
-                __instance.Method_23(); // SetupProceedButton
+                __instance.SetupProceedButton(); // SetupProceedButton
             }
 
             static void PopulateResults(MeetingHud __instance, byte[] states, byte[] votes) {
