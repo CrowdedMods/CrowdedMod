@@ -13,7 +13,7 @@ namespace CrowdedMod.Patches
         {
             public const byte maxPlayers = 127;
             
-            static void Postfix(CreateOptionsPicker __instance)
+            public static void Postfix(CreateOptionsPicker __instance)
             {
                 if (__instance.mode != SettingsMode.Host) return;
                 var offset = __instance.MaxPlayerButtons[1].transform.position.x - __instance.MaxPlayerButtons[0].transform.position.x;
@@ -129,9 +129,9 @@ namespace CrowdedMod.Patches
         }
 
         [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.GameHostOptions), MethodType.Getter)]
-        static class SaveManager_get_GameHostOptions
+        public static class SaveManager_get_GameHostOptions
         {
-            static bool Prefix(out GameOptionsData __result)
+            public static bool Prefix(out GameOptionsData __result)
             {
                 SaveManager.hostOptionsData ??= SaveManager.Method_59("gameHostOptions"); // LoadGameOptions
 

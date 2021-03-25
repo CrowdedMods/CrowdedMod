@@ -6,12 +6,12 @@ using Hazel;
 namespace CrowdedMod.Patches {
     internal static class MeetingHudPatches 
     {
-        static string lastTimerText;
-        static int currentPage = 0;
-        static int maxPages => (int)Mathf.Ceil(GameData.Instance.AllPlayers.Count / 10f);
+        private static string lastTimerText;
+        private static int currentPage;
+        private static int maxPages => (int)Mathf.Ceil(GameData.Instance.AllPlayers.Count / 10f);
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
-        static class VoteGuiPatch {
+        public static class VoteGuiPatch {
             public static void Postfix(MeetingHud __instance) {
                 if (Input.GetKeyDown(KeyCode.UpArrow) || Input.mouseScrollDelta.y > 0f)
                     currentPage = Mathf.Clamp(currentPage - 1, 0, maxPages - 1);
@@ -42,7 +42,7 @@ namespace CrowdedMod.Patches {
         }
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
-        static class MeetingHudCheckForEndVotingPatch {
+        public static class MeetingHudCheckForEndVotingPatch {
             public static bool Prefix(MeetingHud __instance) {
                 if (!__instance.playerStates.All(ps => ps.isDead || ps.didVote)) return false;
                 byte[] self = calculateVotes(__instance.playerStates);
@@ -65,7 +65,7 @@ namespace CrowdedMod.Patches {
                 return false;
             }
 
-            static byte[] calculateVotes(PlayerVoteArea[] states) {
+            private static byte[] calculateVotes(PlayerVoteArea[] states) {
                 byte[] self = new byte[states.Length + 1];
                 foreach (var playerVoteArea in states)
                 {
@@ -79,7 +79,7 @@ namespace CrowdedMod.Patches {
                 return self;
             }
     
-            static int indexOfMax(byte[] array, out bool tie) {
+            private static int indexOfMax(byte[] array, out bool tie) {
                 tie = false;
                 int result = -1;
                 int maxNum = int.MinValue;
@@ -100,7 +100,7 @@ namespace CrowdedMod.Patches {
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.HandleRpc), typeof(byte), typeof(MessageReader))]
         public static class MeetingHudHandleRpcPatch {
-            static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)] byte callId, [HarmonyArgument(1)] MessageReader reader) {
+            public static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)] byte callId, [HarmonyArgument(1)] MessageReader reader) {
                 if (callId == 23)
                 {
                     byte[] states = reader.ReadBytesAndSize();
@@ -128,7 +128,7 @@ namespace CrowdedMod.Patches {
                 __instance.SetupProceedButton(); // SetupProceedButton
             }
 
-            static void PopulateResults(MeetingHud __instance, byte[] states, byte[] votes) {
+            private static void PopulateResults(MeetingHud __instance, byte[] states, byte[] votes) {
                 __instance.TitleText.Text = "Voting Results";
                 int num = 0;
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
@@ -148,14 +148,16 @@ namespace CrowdedMod.Patches {
                             spriteRenderer.transform.localScale = Vector3.zero;
 
                             if (playerVoteArea.TargetPlayerId == votedFor) {
-                                spriteRenderer.transform.SetParent(playerVoteArea.transform);
-                                spriteRenderer.transform.localPosition = __instance.CounterOrigin + new Vector3(__instance.CounterOffsets.x * num2, 0f, 0f);
-                                __instance.StartCoroutine(Effects.Bloop(num2 * 0.5f, spriteRenderer.transform, 1f, 0.5f));
+                                Transform transform;
+                                (transform = spriteRenderer.transform).SetParent(playerVoteArea.transform);
+                                transform.localPosition = __instance.CounterOrigin + new Vector3(__instance.CounterOffsets.x * num2, 0f, 0f);
+                                __instance.StartCoroutine(Effects.Bloop(num2 * 0.5f, transform, 1f, 0.5f));
                                 num2++;
                             } else if (i == 0 && votedFor == -1) {
-                                spriteRenderer.transform.SetParent(__instance.SkippedVoting.transform);
-                                spriteRenderer.transform.localPosition = __instance.CounterOrigin + new Vector3(__instance.CounterOffsets.x * num, 0f, 0f);
-                                __instance.StartCoroutine(Effects.Bloop(num * 0.5f, spriteRenderer.transform, 1f, 0.5f));
+                                Transform transform;
+                                (transform = spriteRenderer.transform).SetParent(__instance.SkippedVoting.transform);
+                                transform.localPosition = __instance.CounterOrigin + new Vector3(__instance.CounterOffsets.x * num, 0f, 0f);
+                                __instance.StartCoroutine(Effects.Bloop(num * 0.5f, transform, 1f, 0.5f));
                                 num++;
                             }
                         }

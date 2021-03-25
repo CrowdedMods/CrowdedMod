@@ -3,14 +3,12 @@ using UnityEngine;
 using HarmonyLib;
 using System.Linq;
 
-//using HudOverrideTask = LFOILEODBMA;
-
 namespace CrowdedMod.Patches {
     internal static class VitalsPatches
     {
-        static int currentPage = 0;
-        const int maxPerPage = 10;
-        static int maxPages => (int)Mathf.Ceil((float)PlayerControl.AllPlayerControls.Count / maxPerPage);
+        private static int currentPage;
+        private const int maxPerPage = 10;
+        private static int maxPages => (int)Mathf.Ceil((float)PlayerControl.AllPlayerControls.Count / maxPerPage);
 
         [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Begin))]
         public static class VitalsGuiPatchBegin
@@ -59,7 +57,10 @@ namespace CrowdedMod.Patches {
                         panel.gameObject.SetActive(true);
                         int relativeIndex = i % maxPerPage;
                         // /!\ -2.7f hardcoded, can we get it the same way as MeetingHud.VoteOrigin ?
-                        panel.transform.localPosition = new Vector3(-2.7f + 0.6f * relativeIndex, panel.transform.localPosition.y, panel.transform.localPosition.z);
+                        var transform = panel.transform;
+                        var localPosition = transform.localPosition;
+                        localPosition = new Vector3(-2.7f + 0.6f * relativeIndex, localPosition.y, localPosition.z);
+                        transform.localPosition = localPosition;
                     }
                     else
                         panel.gameObject.SetActive(false);
