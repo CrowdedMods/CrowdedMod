@@ -1,5 +1,7 @@
 ﻿using System.Linq;
+using CrowdedMod.Net;
 using HarmonyLib;
+using Reactor.Networking;
 using UnhollowerBaseLib;
 using UnityEngine;
 
@@ -26,10 +28,10 @@ namespace CrowdedMod.Patches {
             }
         }
 
-        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor), typeof(byte))]
-        public static class PlayerControlCheckColorPatch {
-            public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] byte colorId) {
-                __instance.RpcSetColor(colorId);
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdCheckColor))]
+        public static class PlayerControlCmdCheckColorPatch {
+            public static bool Prefix([HarmonyArgument(0)] byte colorId) {
+                Rpc<SetColorRpc>.Instance.Send(colorId);
                 return false;
             }
         }

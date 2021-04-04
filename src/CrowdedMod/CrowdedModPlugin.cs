@@ -18,6 +18,7 @@ namespace CrowdedMod {
         {
             GameOptionsData.RecommendedImpostors = GameOptionsData.MaxImpostors = Enumerable.Repeat(127, 127).ToArray();
             GameOptionsData.MinPlayers = Enumerable.Repeat(4, 127).ToArray();
+            RegisterCustomRpcAttribute.Register(this);
             
             Harmony.PatchAll();
         }
