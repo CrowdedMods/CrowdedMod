@@ -27,7 +27,7 @@ namespace CrowdedMod.Patches
                 plusButton.name = "255";
                 plusButton.transform.position = playerButtons.Last().transform.position + new Vector3(offset*2, 0, 0);
                 var passiveButton = plusButton.GetComponent<PassiveButton>();
-                passiveButton.OnClick.m_PersistentCalls.m_Calls.Clear();
+                passiveButton.OnClick.RemoveAllListeners();
                 passiveButton.OnClick.AddListener((UnityAction)plusListener);
                 
                 void plusListener()
@@ -50,7 +50,7 @@ namespace CrowdedMod.Patches
                 minusButton.name = "255";
                 minusButton.transform.position = playerButtons.First().transform.position;
                 var minusPassiveButton = minusButton.GetComponent<PassiveButton>();
-                minusPassiveButton.OnClick.m_PersistentCalls.m_Calls.Clear();
+                minusPassiveButton.OnClick.RemoveAllListeners();
                 minusPassiveButton.OnClick.AddListener((UnityAction)minusListener);
                 
                 void minusListener()
@@ -71,7 +71,7 @@ namespace CrowdedMod.Patches
                 playerButtons.ForEach(b =>
                 {
                     var button = b.GetComponent<PassiveButton>();
-                    button.OnClick.m_PersistentCalls.m_Calls.Clear();
+                    button.OnClick.RemoveAllListeners();
                     void defaultListener()
                     {
                         byte value = byte.Parse(button.name);
@@ -79,7 +79,7 @@ namespace CrowdedMod.Patches
                         if (value <= targetOptions.NumImpostors)
                         {
                             targetOptions.NumImpostors = value - 1;
-                            __instance.Method_112(targetOptions.NumImpostors); // UpdateImpostorButtons
+                            __instance.ABNOBIOJDEH(targetOptions.NumImpostors); // UpdateImpostorButtons
                         }
                         __instance.SetMaxPlayersButtons(value);
                     } 
@@ -108,7 +108,7 @@ namespace CrowdedMod.Patches
                 impostorButtons.ForEach(b =>
                 {
                     var button = b.GetComponent<PassiveButton>();
-                    button.OnClick.m_PersistentCalls.m_Calls.Clear();
+                    button.OnClick.RemoveAllListeners();
                     void defaultListener()
                     {
                         byte value = byte.Parse(button.name);
@@ -133,7 +133,7 @@ namespace CrowdedMod.Patches
         {
             public static bool Prefix(out GameOptionsData __result)
             {
-                SaveManager.hostOptionsData ??= SaveManager.Method_59("gameHostOptions"); // LoadGameOptions
+                SaveManager.hostOptionsData ??= SaveManager.OODOOJLHAEC("gameHostOptions"); // LoadGameOptions
 
                 // patched because of impostor clamping
                 SaveManager.hostOptionsData.NumImpostors = 
