@@ -2,8 +2,6 @@
 using HarmonyLib;
 using System.Linq;
 using CrowdedMod.Net;
-using Hazel;
-using Reactor;
 using Reactor.Networking;
 
 namespace CrowdedMod.Patches {
@@ -50,7 +48,7 @@ namespace CrowdedMod.Patches {
                 if (!__instance.playerStates.All(ps => ps.isDead || ps.didVote)) return false;
                 byte[] self = calculateVotes(__instance.playerStates);
 
-                int maxIdx = indexOfMax(self, out bool tie) - 1;
+                int maxIdx = indexOfMax(self) - 1;
                 GameData.PlayerInfo exiled = GameData.Instance.GetPlayerById((byte)maxIdx);
                 byte[] states = __instance.playerStates.Select(s => s.GetState()).ToArray();
                 byte[] votes = __instance.playerStates.Select(s => (byte)s.votedFor).ToArray();
@@ -77,8 +75,7 @@ namespace CrowdedMod.Patches {
                 return self;
             }
     
-            private static int indexOfMax(byte[] array, out bool tie) {
-                tie = false;
+            private static int indexOfMax(byte[] array) {
                 int result = -1;
                 int maxNum = int.MinValue;
                 for (int i = 0; i < array.Length; i++) {
@@ -86,10 +83,8 @@ namespace CrowdedMod.Patches {
                     if (curNum > maxNum) {
                         result = i;
                         maxNum = curNum;
-                        tie = false;
                     } else if (curNum == maxNum) {
                         result = -1;
-                        tie = true;
                     }
                 }
                 return result;
