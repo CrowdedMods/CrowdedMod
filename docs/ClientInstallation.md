@@ -1,8 +1,8 @@
 ## Client mod installation
-To make mod work, you need two pieces. Custom server [(Impostor) with custom plugin](https://github.com/CrowdedMods/CrowdedMod/tree/master-refactor/docs/ServerInstallation.md) and a client-side mod.
+To make mod work, you need two pieces. Custom server [(Impostor)](https://github.com/CrowdedMods/CrowdedMod/tree/master-refactor/docs/ServerInstallation.md) and a client-side mod (CrowdedMod).
 <br/>After installing this mod, you need to also [add custom server to the client menu](https://github.com/CrowdedMods/CrowdedMod/tree/master-refactor/docs/ServerSelection.md).
 ### Method 1 (the easiest)
-Use dropship. Coming soon.
+Use dropship/launcher. Coming soon.
 <!-- ### Method 2 (recommended) --> 
 <!-- 1. Download zip from [releases](https://github.com/CrowdedMods/CrowdedMod/releases) -->
 <!-- 2. Open your Downloads folder and double click the zip file -->
@@ -12,15 +12,10 @@ Use dropship. Coming soon.
 <!-- 6. Start Among Us **from  Steam**. Not from toolbar or shortcut or search -->
 <!-- 7. After Among Us started, in the left upper corner there should be CrowdedMod version information displayed -->
 ### Method 2 (recommended)
-1. Download [BepInEx x86](https://builds.bepis.io/projects/bepinex_be/335/BepInEx_UnityIL2CPP_x86_acedebc_6.0.0-be.335.zip)
-2. Download dll from [CurseForge](https://www.curseforge.com/among-us/all-mods/crowdedmod/files)
-3. Open your Downloads folder and double click the zip file
-4. Select all files (Ctrl+A) and copy them (Ctrl+C)
-5. Open Steam library, select Among Us. Click Settings (gear icon) > Manage > Browse local files
-6. A window should open. Paste files here (Ctrl+V)
-7. Go back to Downloads and copy a DLL (LClick on the file, Ctrl+C)
-8. Go to the window from point 6, BepInEx > plugins. And paste the file there (Ctrl+V)
-9. Start Among Us **from  Steam**. Not from toolbar, shortcut or search
+1. Download latest [BepInEx (Reactor fork)](https://github.com/NuclearPowered/BepInEx/releases)
+2. Extract all files from zipped archive and put them in Among Us directory (where Among Us.exe is)
+3. Download [latest Reactor.dll for 2020.3.5s](https://nightly.link/NuclearPowered/Reactor/workflows/main/master) and put it in `YourAmongUsDirectory/BepInEx/plugins` (you probably have to unzip it first)
+4. Download dll from [CurseForge](https://www.curseforge.com/among-us/all-mods/crowdedmod/files) and put it in `YourAmongUsDirectory/BepInEx/plugins` (you probably have to unzip it first)
 
 ### Method 3 (for security paranoid)
 1. Set up development environment.
