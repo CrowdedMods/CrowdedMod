@@ -45,7 +45,7 @@ namespace CrowdedMod.Patches {
         }
             
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
-        static class PingShowerPatch
+        public static class PingShowerPatch
         {
             public static void Postfix(PingTracker __instance)
             {
@@ -54,7 +54,7 @@ namespace CrowdedMod.Patches {
         }
 
         [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.OnEnable))]
-        static class GameSettingMenu_OnEnable // Credits to https://github.com/Galster-dev/GameSettingsUnlocker
+        public static class GameSettingMenu_OnEnable // Credits to https://github.com/Galster-dev/GameSettingsUnlocker
         {
             static void Prefix(ref GameSettingMenu __instance)
             {
@@ -63,7 +63,7 @@ namespace CrowdedMod.Patches {
         }
 
         [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
-        static class GameOptionsMenu_Start
+        public static class GameOptionsMenu_Start
         {
             static void Postfix(ref GameOptionsMenu __instance)
             {
