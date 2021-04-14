@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -23,7 +24,7 @@ namespace CrowdedMod.Patches
                 List<SpriteRenderer> playerButtons = __instance.MaxPlayerButtons.ToList();
                 
                 SpriteRenderer plusButton = Object.Instantiate(playerButtons.Last(), playerButtons.Last().transform.parent);
-                plusButton.GetComponentInChildren<TextRenderer>().Text = "+";
+                plusButton.GetComponentInChildren<TextMeshPro>().text = "+";
                 plusButton.name = "255";
                 plusButton.transform.position = playerButtons.Last().transform.position + new Vector3(offset*2, 0, 0);
                 var passiveButton = plusButton.GetComponent<PassiveButton>();
@@ -39,14 +40,14 @@ namespace CrowdedMod.Patches
                     {
                         SpriteRenderer button = __instance.MaxPlayerButtons[i];
                         button.name = 
-                            button.GetComponentInChildren<TextRenderer>().Text = 
+                            button.GetComponentInChildren<TextMeshPro>().text = 
                                 (byte.Parse(button.name) + delta).ToString();
                     }
                     __instance.SetMaxPlayersButtons(__instance.GetTargetOptions().MaxPlayers);
                 }
                 
                 SpriteRenderer minusButton = Object.Instantiate(playerButtons.Last(), playerButtons.Last().transform.parent);
-                minusButton.GetComponentInChildren<TextRenderer>().Text = "-";
+                minusButton.GetComponentInChildren<TextMeshPro>().text = "-";
                 minusButton.name = "255";
                 minusButton.transform.position = playerButtons.First().transform.position;
                 var minusPassiveButton = minusButton.GetComponent<PassiveButton>();
@@ -62,7 +63,7 @@ namespace CrowdedMod.Patches
                     {
                         SpriteRenderer button = __instance.MaxPlayerButtons[i];
                         button.name = 
-                            button.GetComponentInChildren<TextRenderer>().Text = 
+                            button.GetComponentInChildren<TextMeshPro>().text = 
                                 (byte.Parse(button.name) - delta).ToString();
                     }
                     __instance.SetMaxPlayersButtons(__instance.GetTargetOptions().MaxPlayers);
@@ -100,7 +101,7 @@ namespace CrowdedMod.Patches
                 for (byte i = 4; i < 11; i++)
                 {
                     SpriteRenderer button = Object.Instantiate(impostorButtons.Last(), impostorButtons.Last().transform.parent);
-                    button.GetComponent<PassiveButton>().name = button.GetComponentInChildren<TextRenderer>().Text = i.ToString();
+                    button.GetComponent<PassiveButton>().name = button.GetComponentInChildren<TextMeshPro>().text = i.ToString();
                     button.transform.position += new Vector3(offset, 0, 0);
                     impostorButtons.Add(button);
                 }
