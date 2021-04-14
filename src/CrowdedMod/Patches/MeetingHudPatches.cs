@@ -19,8 +19,8 @@ namespace CrowdedMod.Patches {
                 else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.mouseScrollDelta.y < 0f)
                     currentPage = Mathf.Clamp(currentPage + 1, 0, maxPages - 1);
 
-                if (__instance.TimerText.Text != lastTimerText)
-                    __instance.TimerText.Text = (lastTimerText = __instance.TimerText.Text + $" ({currentPage + 1}/{maxPages})");
+                if (__instance.TimerText.text != lastTimerText)
+                    __instance.TimerText.text = lastTimerText = __instance.TimerText.text + $" ({currentPage + 1}/{maxPages})";
 
                 PlayerVoteArea[] playerButtons = __instance.playerStates.OrderBy(x => x.isDead).ToArray();
                 int i = 0;

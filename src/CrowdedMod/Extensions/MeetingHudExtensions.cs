@@ -27,7 +27,7 @@ namespace CrowdedMod.Extensions
 
         private static void PopulateResults(MeetingHud __instance, byte[] states, byte[] votes)
         {
-            __instance.TitleText.Text = TranslationController.Instance.GetString(StringNames.MeetingVotingResults, Array.Empty<Il2CppSystem.Object>());
+            __instance.TitleText.text = TranslationController.Instance.GetString(StringNames.MeetingVotingResults, Array.Empty<Il2CppSystem.Object>());
             int num = 0;
             for (int i = 0; i < __instance.playerStates.Length; i++)
             {

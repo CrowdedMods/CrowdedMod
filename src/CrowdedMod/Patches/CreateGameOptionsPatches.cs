@@ -79,7 +79,7 @@ namespace CrowdedMod.Patches
                         if (value <= targetOptions.NumImpostors)
                         {
                             targetOptions.NumImpostors = value - 1;
-                            __instance.ABNOBIOJDEH(targetOptions.NumImpostors); // UpdateImpostorButtons
+                            __instance.UpdateImpostorsButtons(targetOptions.NumImpostors);
                         }
                         __instance.SetMaxPlayersButtons(value);
                     } 
@@ -133,7 +133,7 @@ namespace CrowdedMod.Patches
         {
             public static bool Prefix(out GameOptionsData __result)
             {
-                SaveManager.hostOptionsData ??= SaveManager.OODOOJLHAEC("gameHostOptions"); // LoadGameOptions
+                SaveManager.hostOptionsData ??= SaveManager.LoadGameOptions("gameHostOptions");
 
                 // patched because of impostor clamping
                 SaveManager.hostOptionsData.NumImpostors = 
