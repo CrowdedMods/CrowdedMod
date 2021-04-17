@@ -1,5 +1,7 @@
 ﻿using System.Linq;
+using CrowdedMod.Net;
 using HarmonyLib;
+using Reactor.Networking;
 using UnhollowerBaseLib;
 using UnityEngine;
 
@@ -26,10 +28,10 @@ namespace CrowdedMod.Patches {
             }
         }
 
-        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor), typeof(byte))]
-        public static class PlayerControlCheckColorPatch {
-            public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] byte colorId) {
-                __instance.RpcSetColor(colorId);
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdCheckColor))]
+        public static class PlayerControlCmdCheckColorPatch {
+            public static bool Prefix([HarmonyArgument(0)] byte colorId) {
+                Rpc<SetColorRpc>.Instance.Send(colorId);
                 return false;
             }
         }
@@ -43,29 +45,19 @@ namespace CrowdedMod.Patches {
                 return false;
             }
         }
-        
-        // Got inlined in 2021.3.5s, hard to patch and not worth it
-        // [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.GetSpawnLocation))]
-        // public static class ShipStatusGetSpawnLocationPatch
-        // {
-        //     public static void Prefix(ShipStatus __instance, [HarmonyArgument(0)] ref int playerId, [HarmonyArgument(1)] ref int numPlayer)
-        //     {
-        //         playerId %= 10;
-        //         if (numPlayer > 10) numPlayer = 10;
-        //     }
-        // }
             
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
-        static class PingShowerPatch
+        public static class PingShowerPatch
         {
             public static void Postfix(PingTracker __instance)
             {
-                __instance.text.Text += "\n[FFB793FF]> CrowdedMod <[]";
+                __instance.text.autoSizeTextContainer = true; // 12.4s why?
+                __instance.text.text += "\n[FFB793FF]> CrowdedMod <[]";
             }
         }
 
         [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.OnEnable))]
-        static class GameSettingMenu_OnEnable // Credits to https://github.com/Galster-dev/GameSettingsUnlocker
+        public static class GameSettingMenu_OnEnable // Credits to https://github.com/Galster-dev/GameSettingsUnlocker
         {
             static void Prefix(ref GameSettingMenu __instance)
             {
@@ -74,7 +66,7 @@ namespace CrowdedMod.Patches {
         }
 
         [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
-        static class GameOptionsMenu_Start
+        public static class GameOptionsMenu_Start
         {
             static void Postfix(ref GameOptionsMenu __instance)
             {
