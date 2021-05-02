@@ -6,7 +6,7 @@ Use dropship/launcher. Coming soon.
 ### Method 2 (recommended)
 1. Download latest [BepInEx (Reactor fork)](https://github.com/NuclearPowered/BepInEx/releases)
 2. Extract all files from zipped archive and put them in Among Us directory (where Among Us.exe is)
-3. Download [latest Reactor.dll for 2021.4.12s](https://nightly.link/NuclearPowered/Reactor/workflows/main/master) and put it in `YourAmongUsDirectory/BepInEx/plugins` (you probably have to unzip it first)
+3. Download [latest Reactor.dll for 2021.4.14s](https://nightly.link/NuclearPowered/Reactor/workflows/main/master) and put it in `YourAmongUsDirectory/BepInEx/plugins` (you probably have to unzip it first)
 4. Download right CrowdedMod dll from [CurseForge](https://www.curseforge.com/among-us/all-mods/crowdedmod/files) or github releases and put it in `YourAmongUsDirectory/BepInEx/plugins` (you probably have to unzip it first)
 
 ### Method 3 (for security paranoid)
