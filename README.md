@@ -14,7 +14,7 @@ Works on Among Us Steam version from **v2020.12.9s** to **v2021.4.14s**.<br/>
 ## Versions
 | Mod version   | Game version  | BepInEx | Downloads |
 | ------------- | ------------- | ------- | --------- |
-| v2.5.0        | v2021.4.14s   | [Reactor BepInEx](https://github.com/NuclearPowered/BepInEx/releases/download/6.0.0-reactor.18%2Bstructfix/BepInEx-6.0.0-reactor.18+structfix.zip) | [CurseForge](https://www.curseforge.com/among-us/all-mods/crowdedmod/files/3296321) |
+| v2.5.0        | v2021.4.14s   | [Reactor BepInEx](https://github.com/NuclearPowered/BepInEx/releases/download/6.0.0-reactor.18%2Bstructfix/BepInEx-6.0.0-reactor.18+structfix.zip) | [CurseForge](https://www.curseforge.com/among-us/all-mods/crowdedmod/files/3296325) |
 | v2.4.0        | v2021.4.12s   | [Reactor BepInEx](https://github.com/NuclearPowered/BepInEx/releases/download/6.0.0-reactor.18%2Bstructfix/BepInEx-6.0.0-reactor.18+structfix.zip) | [CurseForge](https://www.curseforge.com/among-us/all-mods/crowdedmod/files/3279698) |
 | v2.3.0        | v2021.3.31.3s | [Reactor BepInEx](https://github.com/NuclearPowered/BepInEx/releases/download/6.0.0-reactor.18%2Bstructfix/BepInEx-6.0.0-reactor.18+structfix.zip) | [CurseForge](https://www.curseforge.com/among-us/all-mods/crowdedmod/files/3279689) |
 | v2.2.0        | v2021.3.5     | [Reactor BepInEx](https://github.com/NuclearPowered/BepInEx/releases/download/6.0.0-reactor.16/BepInEx-6.0.0-reactor.16.zip) | [CurseForge](https://www.curseforge.com/among-us/all-mods/crowdedmod/files/3261806) |
