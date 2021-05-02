@@ -52,7 +52,7 @@ namespace CrowdedMod.Patches {
             public static void Postfix(PingTracker __instance)
             {
                 __instance.text.autoSizeTextContainer = true; // 12.4s why?
-                __instance.text.text += "\n[FFB793FF]> CrowdedMod <[]";
+                __instance.text.text += "\n<color=#FFB793> CrowdedMod </color>";
             }
         }
 
