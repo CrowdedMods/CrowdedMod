@@ -1,8 +1,7 @@
-﻿namespace CrowdedMod.Net
+﻿namespace CrowdedMod.Net;
+
+public enum CustomRpcCalls
 {
-    public enum CustomRpcCalls
-    {
-        SetColor,
-        VotingComplete
-    }
+    SetColor,
+    VotingComplete
 }
