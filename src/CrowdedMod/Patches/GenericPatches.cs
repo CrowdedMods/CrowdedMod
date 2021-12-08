@@ -49,9 +49,11 @@ namespace CrowdedMod.Patches {
         {
             public static bool Prefix(PlayerTab __instance)
             {
-                PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId,
-                    __instance.PlayerPreview.HatSlot.Parent);
-                    
+                if (__instance.HasLocalPlayer())
+                {
+                    __instance.PlayerPreview.HatSlot.SetColor(PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId);
+                }
+
                 for (var i = 0; i < Palette.PlayerColors.Length; i++)
                     __instance.AvailableColors.Add(i);
                     
