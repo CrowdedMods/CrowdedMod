@@ -6,7 +6,7 @@ using Reactor;
 
 namespace CrowdedMod;
 
-[BepInAutoPlugin("pl.przebor.crowded")]
+[BepInAutoPlugin("xyz.crowdedmods.crowdedmod")]
 [BepInProcess("Among Us.exe")]
 [BepInDependency(ReactorPlugin.Id)]
 public partial class CrowdedModPlugin : BasePlugin
