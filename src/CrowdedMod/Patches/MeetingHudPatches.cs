@@ -7,7 +7,8 @@ namespace CrowdedMod.Patches {
     {
         private static string lastTimerText = "";
         private static int currentPage;
-        private static int maxPages => (int)Mathf.Ceil(GameData.Instance.AllPlayers.Count / 15f);
+        private const int maxPerPage = 15;
+        private static int maxPages => (int)Mathf.Ceil(GameData.Instance.AllPlayers.Count / (float)maxPerPage);
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
         public static class VoteGuiPatch {
@@ -20,13 +21,13 @@ namespace CrowdedMod.Patches {
                 if (__instance.TimerText.text != lastTimerText)
                     __instance.TimerText.text = lastTimerText = __instance.TimerText.text + $" ({currentPage + 1}/{maxPages})";
 
-                PlayerVoteArea[] playerButtons = __instance.playerStates.OrderBy(x => x.AmDead).ToArray();
-                int i = 0;
-                foreach (PlayerVoteArea button in playerButtons) {
-                    if (i >= currentPage * 15 && i < (currentPage + 1) * 15) {
+                var playerButtons = __instance.playerStates.OrderBy(x => x.AmDead).ToArray();
+                var i = 0;
+                foreach (var button in playerButtons) {
+                    if (i >= currentPage * maxPerPage && i < (currentPage + 1) * maxPerPage) {
                         button.gameObject.SetActive(true);
 
-                        int relativeIndex = i % 15;
+                        var relativeIndex = i % maxPerPage;
                         button.transform.localPosition = __instance.VoteOrigin +
                                                          new Vector3(
                                                              __instance.VoteButtonOffsets.x * (relativeIndex % 3),

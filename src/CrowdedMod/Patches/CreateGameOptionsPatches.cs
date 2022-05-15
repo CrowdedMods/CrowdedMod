@@ -29,7 +29,7 @@ namespace CrowdedMod.Patches
                 
                 var playerButtons = __instance.MaxPlayerButtons.ToArray().ToList(); // cringe but works
                 
-                SpriteRenderer plusButton = Object.Instantiate(playerButtons.Last(), playerButtons.Last().transform.parent);
+                var plusButton = Object.Instantiate(playerButtons.Last(), playerButtons.Last().transform.parent);
                 plusButton.GetComponentInChildren<TextMeshPro>().text = "+";
                 plusButton.name = "255";
                 plusButton.transform.position = playerButtons.Last().transform.position + new Vector3(offset*2, 0, 0);
@@ -39,12 +39,12 @@ namespace CrowdedMod.Patches
                 
                 void plusListener()
                 {
-                    byte curHighest = byte.Parse(playerButtons[__instance.MaxPlayerButtons.Count - 2].name);
-                    int delta = Mathf.Clamp(curHighest + 12, curHighest, maxPlayers) - curHighest;
+                    var curHighest = byte.Parse(playerButtons[__instance.MaxPlayerButtons.Count - 2].name);
+                    var delta = Mathf.Clamp(curHighest + 12, curHighest, maxPlayers) - curHighest;
                     if (delta == 0) return; // fast skip
                     for (byte i = 1; i < 13; i++)
                     {
-                        SpriteRenderer button = theHackyHackButtons[i];
+                        var button = theHackyHackButtons[i];
                         button.name = 
                             button.GetComponentInChildren<TextMeshPro>().text = 
                                 (byte.Parse(button.name) + delta).ToString();
@@ -52,7 +52,7 @@ namespace CrowdedMod.Patches
                     __instance.SetMaxPlayersButtons(__instance.GetTargetOptions().MaxPlayers);
                 }
                 
-                SpriteRenderer minusButton = Object.Instantiate(playerButtons.Last(), playerButtons.Last().transform.parent);
+                var minusButton = Object.Instantiate(playerButtons.Last(), playerButtons.Last().transform.parent);
                 minusButton.GetComponentInChildren<TextMeshPro>().text = "-";
                 minusButton.name = "255";
                 minusButton.transform.position = playerButtons.First().transform.position;
@@ -62,12 +62,12 @@ namespace CrowdedMod.Patches
                 
                 void minusListener()
                 {
-                    byte curLowest = byte.Parse(playerButtons[1].name);
-                    int delta = curLowest - Mathf.Clamp(curLowest - 12, 4, curLowest);
+                    var curLowest = byte.Parse(playerButtons[1].name);
+                    var delta = curLowest - Mathf.Clamp(curLowest - 12, 4, curLowest);
                     if (delta == 0) return; // fast skip
                     for (byte i = 1; i < 13; i++)
                     {
-                        SpriteRenderer button = theHackyHackButtons[i];
+                        var button = theHackyHackButtons[i];
                         button.name = 
                             button.GetComponentInChildren<TextMeshPro>().text = 
                                 (byte.Parse(button.name) - delta).ToString();
@@ -81,7 +81,7 @@ namespace CrowdedMod.Patches
                     button.OnClick.RemoveAllListeners();
                     void defaultListener()
                     {
-                        byte value = byte.Parse(button.name);
+                        var value = byte.Parse(button.name);
                         var targetOptions = __instance.GetTargetOptions();
                         if (value <= targetOptions.NumImpostors)
                         {
@@ -107,7 +107,7 @@ namespace CrowdedMod.Patches
                 
                 for (byte i = 4; i < 11; i++)
                 {
-                    SpriteRenderer button = Object.Instantiate(impostorButtons.Last(), impostorButtons.Last().transform.parent);
+                    var button = Object.Instantiate(impostorButtons.Last(), impostorButtons.Last().transform.parent);
                     button.GetComponent<PassiveButton>().name = button.GetComponentInChildren<TextMeshPro>().text = i.ToString();
                     button.transform.position += new Vector3(offset, 0, 0);
                     impostorButtons.Add(button);
@@ -119,7 +119,7 @@ namespace CrowdedMod.Patches
                     button.OnClick.RemoveAllListeners();
                     void defaultListener()
                     {
-                        byte value = byte.Parse(button.name);
+                        var value = byte.Parse(button.name);
                         if (value >= __instance.GetTargetOptions().MaxPlayers)
                         {
                             return;

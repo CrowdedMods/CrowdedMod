@@ -12,7 +12,7 @@ namespace CrowdedMod {
     [BepInDependency("gg.reactor.debugger", BepInDependency.DependencyFlags.SoftDependency)] // fix debugger overwriting MinPlayers
     public partial class CrowdedModPlugin : BasePlugin
     {
-        public Harmony Harmony { get; } = new (Id);
+        private Harmony Harmony { get; } = new (Id);
 
         public override void Load()
         {

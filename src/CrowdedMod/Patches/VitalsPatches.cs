@@ -20,14 +20,14 @@ namespace CrowdedMod.Patches {
                 else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.mouseScrollDelta.y < 0f)
                     currentPage = Mathf.Clamp(currentPage + 1, 0, maxPages - 1);
 
-                int i = 0;
+                var i = 0;
                 //Show/hide/move each panel
-                foreach (VitalsPanel panel in __instance.vitals)
+                foreach (var panel in __instance.vitals)
                 {
                     if (i >= currentPage * maxPerPage && i < (currentPage + 1) * maxPerPage)
                     {
                         panel.gameObject.SetActive(true);
-                        int relativeIndex = i % maxPerPage;
+                        var relativeIndex = i % maxPerPage;
                         panel.transform.localPosition = new Vector3(
                             __instance.XStart + __instance.XOffset * (relativeIndex / 3), 
                             __instance.YStart + __instance.YOffset * (relativeIndex % 3), 
@@ -35,7 +35,9 @@ namespace CrowdedMod.Patches {
                             );
                     }
                     else
+                    {
                         panel.gameObject.SetActive(false);
+                    }
                     i++;
                 }
             }

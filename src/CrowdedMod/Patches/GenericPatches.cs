@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using HarmonyLib;
-using Hazel;
-using InnerNet;
 using UnhollowerBaseLib;
 using UnityEngine;
 
