@@ -1,19 +1,16 @@
 [![Our Discord](https://img.shields.io/discord/787008412482797598?color=7289da&label=DISCORD&style=for-the-badge)](https://discord.gg/XEc7PdDTyn)
 # CrowdedMod
 This mod unlocks the possibility for more than 10 player to join in an Among Us lobby.
-The official servers won't allow for it though, so you will have to host an [Impostor](https://github.com/Impostor/Impostor) custom server (more in [docs](https://github.com/CrowdedMods/CrowdedMod/tree/master/docs)).
 
-Works on Among Us Steam version from **v2020.12.9s** to **v2021.5.10s**.<br/>
+Works on Among Us Steam version from **v2020.12.9s** to **v2022.3.29**
 
-> :warning: **WARNING** :warning:
-> CrowdedMod uses Reactor's CustomRPC system.
-> To properly play on the custom Impostor server, you have to
-> 1. Disable anti-cheat, because it gets triggered by CustomRPCs
-> 2. Use [patched Reactor 5.10s](https://github.com/CrowdedMods/Reactor/releases/download/0.4.1/Reactor-2021.5.10s.dll) without a modded handshake because it wasn't yet implemented in Impostor
+> ### :warning: **WARNING** :warning:
+> CrowdedMod does **not** work on InnerSloth servers and you **have** to use an [Impostor](https://github.com/Impostor/Impostor) server.
 
 ## Versions
 | Mod version   | Game version  | BepInEx | Downloads |
 | ------------- | ------------- | ------- | --------- |
+| v2.7.0        | v2022.3.29    | [BepInEx x86](https://builds.bepinex.dev/projects/bepinex_be/562/BepInEx_UnityIL2CPP_x86_7a97bdd_6.0.0-be.562.zip) | [GitHub](https://github.com/CrowdedMods/CrowdedMod/releases/download/v2.7.0-rc1/CrowdedMod.dll) |
 | v2.6.0        | v2021.5.10s   | [Reactor BepInEx](https://github.com/NuclearPowered/BepInEx/releases/download/6.0.0-reactor.18%2Bstructfix/BepInEx-6.0.0-reactor.18+structfix.zip) | [CurseForge](https://www.curseforge.com/among-us/all-mods/crowdedmod/files/3310911) |
 | v2.5.0        | v2021.4.14s   | [Reactor BepInEx](https://github.com/NuclearPowered/BepInEx/releases/download/6.0.0-reactor.18%2Bstructfix/BepInEx-6.0.0-reactor.18+structfix.zip) | [CurseForge](https://www.curseforge.com/among-us/all-mods/crowdedmod/files/3296325) |
 | v2.4.0        | v2021.4.12s   | [Reactor BepInEx](https://github.com/NuclearPowered/BepInEx/releases/download/6.0.0-reactor.18%2Bstructfix/BepInEx-6.0.0-reactor.18+structfix.zip) | [CurseForge](https://www.curseforge.com/among-us/all-mods/crowdedmod/files/3279698) |
