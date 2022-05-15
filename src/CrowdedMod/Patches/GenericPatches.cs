@@ -1,48 +1,59 @@
-﻿using System.Linq;
-using CrowdedMod.Net;
+﻿using System;
+using System.Linq;
 using HarmonyLib;
-using Reactor.Networking;
+using Hazel;
+using InnerNet;
 using UnhollowerBaseLib;
 using UnityEngine;
 
 namespace CrowdedMod.Patches {
     internal static class GenericPatches {
-        // patched because 10 is hardcoded in `for` loop
-        [HarmonyPatch(typeof(GameData), nameof(GameData.GetAvailableId))]
-        public static class GameDataAvailableIdPatch {
-            public static bool Prefix(ref GameData __instance, out sbyte __result) {
-                for (sbyte i = 0; i <= 127; i++)
-                    if (checkId(__instance, i)) {
-                        __result = i;
-                        return false;
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor))]
+        public static class PlayerControlCheckColorPatch {
+            public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] byte colorId) {
+                __instance.RpcSetColor(colorId);
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.IsSelectedItemEquipped))]
+        public static class PlayerTabIsSelectedItemEquippedPatch {
+            public static bool Prefix(out bool __result)
+            {
+                __result = true;
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Update))]
+        public static class GameStartManagerUpdatePatch
+        {
+            private static string? fixDummyCounterColor;
+            public static void Prefix(GameStartManager __instance)
+            {
+                if (GameData.Instance != null && __instance.LastPlayerCount != GameData.Instance.PlayerCount)
+                {
+                    if (__instance.LastPlayerCount > __instance.MinPlayers)
+                    {
+                        fixDummyCounterColor = "<color=#00FF00FF>";
+                    } else if (__instance.LastPlayerCount == __instance.MinPlayers)
+                    {
+                        fixDummyCounterColor = "<color=#FFFF00FF>";
                     }
-                __result = -1;
-                return false;
+                    else
+                    {
+                        fixDummyCounterColor = "<color=#FF0000FF>";
+                    }
+                }
             }
 
-            static bool checkId(GameData __instance, int id) {
-                foreach (var p in __instance.AllPlayers)
-                    if (p.PlayerId == id)
-                        return false;
-                return true;
-            }
-        }
-
-        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdCheckColor))]
-        public static class PlayerControlCmdCheckColorPatch {
-            public static bool Prefix([HarmonyArgument(0)] byte colorId) {
-                Rpc<SetColorRpc>.Instance.Send(colorId);
-                return false;
-            }
-        }
-
-        [HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.UpdateAvailableColors))]
-        public static class PlayerTabUpdateAvailableColorsPatch {
-            public static bool Prefix(PlayerTab __instance) {
-                PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer._cachedData.ColorId, __instance.DemoImage);
-                for (int i = 0; i < Palette.PlayerColors.Length; i++)
-                    __instance.AvailableColors.Add(i);
-                return false;
+            public static void Postfix(GameStartManager __instance)
+            {
+                if (fixDummyCounterColor != null)
+                {
+                    __instance.PlayerCounter.text = $"{fixDummyCounterColor}{GameData.Instance.PlayerCount}/{PlayerControl.GameOptions.MaxPlayers}";
+                    fixDummyCounterColor = null;
+                }
             }
         }
             
@@ -51,7 +62,7 @@ namespace CrowdedMod.Patches {
         {
             public static void Postfix(PingTracker __instance)
             {
-                __instance.text.autoSizeTextContainer = true; // 12.4s why?
+                // __instance.text.autoSizeTextContainer = true; // 12.4s why?
                 __instance.text.text += "\n<color=#FFB793> CrowdedMod </color>";
             }
         }
@@ -64,6 +75,53 @@ namespace CrowdedMod.Patches {
                 __instance.HideForOnline = new Il2CppReferenceArray<Transform>(0);
             }
         }
+
+        // Will be patched with signatures later when BepInEx reveals it
+        // [HarmonyPatch(typeof(InnerNetServer), nameof(InnerNetServer.HandleNewGameJoin))]
+        // public static class InnerNetSerer_HandleNewGameJoin
+        // {
+        //     public static bool Prefix(InnerNetServer __instance, [HarmonyArgument(0)] InnerNetServer.Player client)
+        //     {
+        //         if (__instance.Clients.Count >= 15)
+        //         {
+        //             __instance.Clients.Add(client);
+        //
+        //             client.LimboState = LimboStates.PreSpawn;
+        //             if (__instance.HostId == -1)
+        //             {
+        //                 __instance.HostId = __instance.Clients.ToArray()[0].Id;
+        //
+        //                 if (__instance.HostId == client.Id)
+        //                 {
+        //                     client.LimboState = LimboStates.NotLimbo;
+        //                 }
+        //             }
+        //
+        //             var writer = MessageWriter.Get(SendOption.Reliable);
+        //             try
+        //             {
+        //                 __instance.WriteJoinedMessage(client, writer, true);
+        //                 client.Connection.Send(writer);
+        //                 __instance.BroadcastJoinMessage(client, writer);
+        //             }
+        //             catch (Il2CppException exception)
+        //             {
+        //                 Debug.LogError("[CM] InnerNetServer::HandleNewGameJoin MessageWriter 2 Exception: " +
+        //                                exception.Message);
+        //                 // ama too stupid for this 
+        //                 // Debug.LogException(exception.InnerException, __instance);
+        //             }
+        //             finally
+        //             {
+        //                 writer.Recycle();
+        //             }
+        //
+        //             return false;
+        //         }
+        //
+        //         return true;
+        //     }
+        // }
 
         [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
         public static class GameOptionsMenu_Start

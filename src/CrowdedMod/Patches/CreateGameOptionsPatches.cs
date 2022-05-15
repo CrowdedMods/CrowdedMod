@@ -1,27 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using HarmonyLib;
 using TMPro;
+using UnhollowerBaseLib;
 using UnityEngine;
 using UnityEngine.Events;
+using Object = UnityEngine.Object;
 
 namespace CrowdedMod.Patches
 {
     internal static class CreateGameOptionsPatches
     {
-        [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.Start))]
+        [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.Awake))]
         public static class CreateOptionsPicker_Start // Credits to XtraCube (mostly)
         {
             public const byte maxPlayers = 127;
             
-            public static void Postfix(CreateOptionsPicker __instance)
+            public static unsafe void Postfix(CreateOptionsPicker __instance)
             {
                 if (__instance.mode != SettingsMode.Host) return;
-                var offset = __instance.MaxPlayerButtons[1].transform.position.x - __instance.MaxPlayerButtons[0].transform.position.x;
+                
+                // thank you dnf and that person in BepInEx discord
+                // ReSharper disable once CollectionNeverUpdated.Local
+                var theHackyHackButtons = new Il2CppReferenceArray<SpriteRenderer>(*(IntPtr*)__instance.MaxPlayerButtons._items.Pointer);
+                var offset = theHackyHackButtons[1].transform.position.x - theHackyHackButtons[0].transform.position.x;
 
                 #region MaxPlayers stuff
                 
-                List<SpriteRenderer> playerButtons = __instance.MaxPlayerButtons.ToList();
+                var playerButtons = __instance.MaxPlayerButtons.ToArray().ToList(); // cringe but works
                 
                 SpriteRenderer plusButton = Object.Instantiate(playerButtons.Last(), playerButtons.Last().transform.parent);
                 plusButton.GetComponentInChildren<TextMeshPro>().text = "+";
@@ -33,12 +39,12 @@ namespace CrowdedMod.Patches
                 
                 void plusListener()
                 {
-                    byte curHighest = byte.Parse(playerButtons[__instance.MaxPlayerButtons.Length - 2].name);
-                    int delta = Mathf.Clamp(curHighest + 7, curHighest, maxPlayers) - curHighest;
+                    byte curHighest = byte.Parse(playerButtons[__instance.MaxPlayerButtons.Count - 2].name);
+                    int delta = Mathf.Clamp(curHighest + 12, curHighest, maxPlayers) - curHighest;
                     if (delta == 0) return; // fast skip
-                    for (byte i = 1; i < 8; i++)
+                    for (byte i = 1; i < 13; i++)
                     {
-                        SpriteRenderer button = __instance.MaxPlayerButtons[i];
+                        SpriteRenderer button = theHackyHackButtons[i];
                         button.name = 
                             button.GetComponentInChildren<TextMeshPro>().text = 
                                 (byte.Parse(button.name) + delta).ToString();
@@ -57,11 +63,11 @@ namespace CrowdedMod.Patches
                 void minusListener()
                 {
                     byte curLowest = byte.Parse(playerButtons[1].name);
-                    int delta = curLowest - Mathf.Clamp(curLowest - 7, 4, curLowest);
+                    int delta = curLowest - Mathf.Clamp(curLowest - 12, 4, curLowest);
                     if (delta == 0) return; // fast skip
-                    for (byte i = 1; i < 8; i++)
+                    for (byte i = 1; i < 13; i++)
                     {
-                        SpriteRenderer button = __instance.MaxPlayerButtons[i];
+                        SpriteRenderer button = theHackyHackButtons[i];
                         button.name = 
                             button.GetComponentInChildren<TextMeshPro>().text = 
                                 (byte.Parse(button.name) - delta).ToString();
@@ -90,7 +96,8 @@ namespace CrowdedMod.Patches
                 
                 playerButtons.Insert(0, minusButton);
                 playerButtons.Add(plusButton);
-                __instance.MaxPlayerButtons = playerButtons.ToArray();
+                __instance.MaxPlayerButtons.Clear();
+                playerButtons.ForEach(b => __instance.MaxPlayerButtons.Add(b));
                 
                 #endregion
 
