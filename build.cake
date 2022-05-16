@@ -27,7 +27,7 @@ Task("Build")
     foreach (var gamePlatform in new[] { "Steam", "Itch" })
     {
         settings.MSBuildSettings.Properties["GamePlatform"] = new[] { gamePlatform };
-        DotNetCoreBuild(".", settings);
+        DotNetCoreBuild("src", settings);
     }
 });
 
