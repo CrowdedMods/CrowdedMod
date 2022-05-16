@@ -22,6 +22,24 @@ namespace CrowdedMod.Patches {
             }
         }
 
+        [HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.UpdateAvailableColors))]
+        public static class PlayerTabUpdateAvailableColorsPatch
+        {
+            public static bool Prefix(PlayerTab __instance)
+            {
+                __instance.AvailableColors.Clear();
+                for (var i = 0; i < Palette.PlayerColors.Count; i++)
+                {
+                    if(!PlayerControl.LocalPlayer || PlayerControl.LocalPlayer.CurrentOutfit.ColorId != i)
+                    {
+                        __instance.AvailableColors.Add(i);
+                    }
+                }
+
+                return false;
+            }
+        }
+
         [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Update))]
         public static class GameStartManagerUpdatePatch
         {
