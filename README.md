@@ -1,6 +1,6 @@
 [![Our Discord](https://img.shields.io/discord/787008412482797598?color=7289da&label=DISCORD&style=for-the-badge)](https://discord.gg/XEc7PdDTyn)
 # CrowdedMod
-This mod unlocks the possibility for more than 10 player to join in an Among Us lobby.
+This mod unlocks the possibility for more than 15 player to join in an Among Us lobby.
 
 Works on Among Us Steam version from **v2020.12.9s** to **v2022.3.29**
 
