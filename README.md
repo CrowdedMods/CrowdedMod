@@ -6,7 +6,8 @@ Works on Among Us Steam version from **v2020.12.9s** to **v2022.3.29**
 
 > ### :warning: **WARNING** :warning:
 > CrowdedMod does **not** work on InnerSloth servers and you **have** to use an [Impostor](https://github.com/Impostor/Impostor) server.
-
+> ### ALSO
+> Starting with v2.7.0 local game (lan) does **not** work yet. Waiting for BepInEx changes
 ## Versions
 | Mod version   | Game version  | BepInEx | Downloads |
 | ------------- | ------------- | ------- | --------- |
