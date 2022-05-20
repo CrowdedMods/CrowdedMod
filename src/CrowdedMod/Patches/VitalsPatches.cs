@@ -29,8 +29,8 @@ namespace CrowdedMod.Patches {
                         panel.gameObject.SetActive(true);
                         var relativeIndex = i % maxPerPage;
                         panel.transform.localPosition = new Vector3(
-                            __instance.XStart + __instance.XOffset * (relativeIndex / 3), 
-                            __instance.YStart + __instance.YOffset * (relativeIndex % 3), 
+                            __instance.XStart + __instance.XOffset * (relativeIndex % 3), 
+                            __instance.YStart + __instance.YOffset * (relativeIndex / 3), 
                             -1f
                             );
                     }
