@@ -28,11 +28,12 @@ namespace CrowdedMod.Patches {
                         button.gameObject.SetActive(true);
 
                         var relativeIndex = i % maxPerPage;
+                        var row = relativeIndex / 3;
                         button.transform.localPosition = __instance.VoteOrigin +
                                                          new Vector3(
                                                              __instance.VoteButtonOffsets.x * (relativeIndex % 3),
-                                                             __instance.VoteButtonOffsets.y * (relativeIndex / 3), 
-                                                             -1f
+                                                             __instance.VoteButtonOffsets.y * row, 
+                                                             -0.9f - row * 0.01f
                                                          );
                     } else
                         button.gameObject.SetActive(false);
