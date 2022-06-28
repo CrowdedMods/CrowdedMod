@@ -9,18 +9,31 @@ namespace CrowdedMod.Patches {
         private static int currentPage;
         private const int maxPerPage = 15;
         private static int maxPages => (int)Mathf.Ceil(GameData.Instance.AllPlayers.Count / (float)maxPerPage);
+        private static bool hasChangedPage = false;
 
+        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
+        public static class VoteGuiStartPatch
+        {
+            public static void Postfix()
+            {
+                hasChangedPage = true;
+            }
+        }
+        
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
         public static class VoteGuiPatch {
             public static void Postfix(MeetingHud __instance)
             {
-                var hasChangedPage = true;
                 if (Input.GetKeyDown(KeyCode.UpArrow) || Input.mouseScrollDelta.y > 0f)
+                {
                     currentPage = Mathf.Clamp(currentPage - 1, 0, maxPages - 1);
+                    hasChangedPage = true;
+                }
                 else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.mouseScrollDelta.y < 0f)
+                {
                     currentPage = Mathf.Clamp(currentPage + 1, 0, maxPages - 1);
-                else
-                    hasChangedPage = false;
+                    hasChangedPage = true;
+                }
                 
 
                 if (__instance.TimerText.text != lastTimerText)
@@ -47,6 +60,8 @@ namespace CrowdedMod.Patches {
                         button.gameObject.SetActive(false);
                     i++;
                 }
+
+                hasChangedPage = false;
             }
         }
     }
