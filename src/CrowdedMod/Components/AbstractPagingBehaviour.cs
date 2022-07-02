@@ -6,7 +6,7 @@ namespace CrowdedMod.Components;
 // Interface until unhollower implements generic il2cpp (if it's possible)
 /// <summary>
 /// This class is not actually abstract because unhollower does not support it <br/>
-/// You need to implement <see cref="OnPageChanged"/> and <see cref="MaxPages"/>
+/// You need to implement <see cref="OnPageChanged"/> and <see cref="MaxPage"/>
 /// </summary>
 public class AbstractPagingBehaviour : MonoBehaviour
 {
@@ -29,7 +29,7 @@ public class AbstractPagingBehaviour : MonoBehaviour
         }
     }
 
-    public virtual int MaxPages => throw new NotImplementedException();
+    public virtual int MaxPage => throw new NotImplementedException();
     // public virtual int MaxPages => Targets.Count() / MaxPerPage;
 
     public virtual void OnPageChanged() => throw new NotImplementedException();
@@ -43,11 +43,11 @@ public class AbstractPagingBehaviour : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.mouseScrollDelta.y > 0f)
         {
-            Page = Mathf.Clamp(Page - 1, 0, MaxPages);
+            Page = Mathf.Clamp(Page - 1, 0, MaxPage);
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.mouseScrollDelta.y < 0f)
         {
-            Page = Mathf.Clamp(Page + 1, 0, MaxPages);
+            Page = Mathf.Clamp(Page + 1, 0, MaxPage);
         }
     }
 }
