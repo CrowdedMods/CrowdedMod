@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Reactor;
@@ -19,15 +19,11 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
     [HideFromIl2Cpp]
     public IEnumerable<PlayerVoteArea> Targets => MeetingHud.playerStates.OrderBy(p => p.AmDead);
     public override int MaxPage => Targets.Count() / MaxPerPage;
-    private string _lastTimerText = "";
 
     public override void Update()
     {
         base.Update();
-        if (_lastTimerText != MeetingHud.TimerText.text)
-        {
-            _lastTimerText = MeetingHud.TimerText.text += $" ({Page + 1}/{MaxPage + 1})";
-        }
+        MeetingHud.TimerText.text += $" ({Page + 1}/{MaxPage + 1})";
     }
 
     public override void OnPageChanged()
