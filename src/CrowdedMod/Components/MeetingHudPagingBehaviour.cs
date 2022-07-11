@@ -18,7 +18,7 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
 
     [HideFromIl2Cpp]
     public IEnumerable<PlayerVoteArea> Targets => MeetingHud.playerStates.OrderBy(p => p.AmDead);
-    public override int MaxPage => Targets.Count() / MaxPerPage;
+    public override int MaxPage => (Targets.Count() - 1) / MaxPerPage;
 
     public override void Update()
     {
