@@ -12,7 +12,7 @@
     </PropertyGroup>
     <PropertyGroup>
         <GamePlatform Condition="'$(GamePlatform)' == ''">Steam</GamePlatform>
-        <GameVersion>2022.3.29</GameVersion>
+        <GameVersion>2022.6.21</GameVersion>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Reactor" Version="1.1.0" />
