@@ -18,7 +18,7 @@ public class ShapeShifterPagingBehaviour : AbstractPagingBehaviour
     [HideFromIl2Cpp]
     public IEnumerable<ShapeshifterPanel> Targets => ShapeshifterMinigame.potentialVictims.ToArray();
 
-    public override int MaxPage => Targets.Count() / MaxPerPage;
+    public override int MaxPage => (Targets.Count() - 1) / MaxPerPage;
 
     public override void OnPageChanged()
     {
