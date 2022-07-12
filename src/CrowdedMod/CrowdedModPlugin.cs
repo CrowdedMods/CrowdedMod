@@ -12,6 +12,9 @@ namespace CrowdedMod {
     [BepInDependency("gg.reactor.debugger", BepInDependency.DependencyFlags.SoftDependency)] // fix debugger overwriting MinPlayers
     public partial class CrowdedModPlugin : BasePlugin
     {
+        public const int MaxPlayers = 127;
+        public const int MaxImpostors = 127 / 2;
+        
         private Harmony Harmony { get; } = new (Id);
 
         public override void Load()
