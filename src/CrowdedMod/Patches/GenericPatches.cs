@@ -143,11 +143,12 @@ namespace CrowdedMod.Patches {
         [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
         public static class GameOptionsMenu_Start
         {
-            static void Postfix(ref GameOptionsMenu __instance)
+            public static void Postfix(ref GameOptionsMenu __instance)
             {
                 __instance.GetComponentsInChildren<NumberOption>()
                     .First(o => o.Title == StringNames.GameNumImpostors)
-                    .ValidRange = new FloatRange(1, (int)(CreateGameOptionsPatches.CreateOptionsPicker_Start.maxPlayers-0.5f)/2);
+                    // ReSharper disable once PossibleLossOfFraction
+                    .ValidRange = new FloatRange(1, CrowdedModPlugin.MaxImpostors);
             }
         }
     }

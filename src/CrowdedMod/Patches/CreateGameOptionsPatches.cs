@@ -1,138 +1,140 @@
 ﻿using System;
-using System.Linq;
 using HarmonyLib;
+using Reactor.Extensions;
 using TMPro;
-using UnhollowerBaseLib;
 using UnityEngine;
-using UnityEngine.Events;
-using Object = UnityEngine.Object;
 
 namespace CrowdedMod.Patches
 {
     internal static class CreateGameOptionsPatches
     {
         [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.Awake))]
-        public static class CreateOptionsPicker_Start // Credits to XtraCube (mostly)
+        public static class CreateOptionsPicker_Awake
         {
-            public const byte maxPlayers = 127;
-            
-            public static unsafe void Postfix(CreateOptionsPicker __instance)
+            public static void Postfix(CreateOptionsPicker __instance)
             {
                 if (__instance.mode != SettingsMode.Host) return;
-                
-                // thank you dnf and that person in BepInEx discord
-                // ReSharper disable once CollectionNeverUpdated.Local
-                var theHackyHackButtons = new Il2CppReferenceArray<SpriteRenderer>(*(IntPtr*)__instance.MaxPlayerButtons._items.Pointer);
-                var offset = theHackyHackButtons[1].transform.position.x - theHackyHackButtons[0].transform.position.x;
 
-                #region MaxPlayers stuff
-                
-                var playerButtons = __instance.MaxPlayerButtons.ToArray().ToList(); // cringe but works
-                
-                var plusButton = Object.Instantiate(playerButtons.Last(), playerButtons.Last().transform.parent);
-                plusButton.GetComponentInChildren<TextMeshPro>().text = "+";
-                plusButton.name = "255";
-                plusButton.transform.position = playerButtons.Last().transform.position + new Vector3(offset*2, 0, 0);
-                var passiveButton = plusButton.GetComponent<PassiveButton>();
-                passiveButton.OnClick.RemoveAllListeners();
-                passiveButton.OnClick.AddListener((UnityAction)plusListener);
-                
-                void plusListener()
                 {
-                    var curHighest = byte.Parse(playerButtons[__instance.MaxPlayerButtons.Count - 2].name);
-                    var delta = Mathf.Clamp(curHighest + 12, curHighest, maxPlayers) - curHighest;
-                    if (delta == 0) return; // fast skip
-                    for (byte i = 1; i < 13; i++)
+                    var firstButtonRenderer = __instance.MaxPlayerButtons[0];
+                    firstButtonRenderer.GetComponentInChildren<TextMeshPro>().text = "-";
+                    firstButtonRenderer.enabled = false;
+
+                    var firstButtonButton = firstButtonRenderer.GetComponent<PassiveButton>();
+                    firstButtonButton.OnClick.RemoveAllListeners();
+                    firstButtonButton.OnClick.AddListener((Action)(() =>
                     {
-                        var button = theHackyHackButtons[i];
-                        button.name = 
-                            button.GetComponentInChildren<TextMeshPro>().text = 
-                                (byte.Parse(button.name) + delta).ToString();
-                    }
-                    __instance.SetMaxPlayersButtons(__instance.GetTargetOptions().MaxPlayers);
-                }
-                
-                var minusButton = Object.Instantiate(playerButtons.Last(), playerButtons.Last().transform.parent);
-                minusButton.GetComponentInChildren<TextMeshPro>().text = "-";
-                minusButton.name = "255";
-                minusButton.transform.position = playerButtons.First().transform.position;
-                var minusPassiveButton = minusButton.GetComponent<PassiveButton>();
-                minusPassiveButton.OnClick.RemoveAllListeners();
-                minusPassiveButton.OnClick.AddListener((UnityAction)minusListener);
-                
-                void minusListener()
-                {
-                    var curLowest = byte.Parse(playerButtons[1].name);
-                    var delta = curLowest - Mathf.Clamp(curLowest - 12, 4, curLowest);
-                    if (delta == 0) return; // fast skip
-                    for (byte i = 1; i < 13; i++)
-                    {
-                        var button = theHackyHackButtons[i];
-                        button.name = 
-                            button.GetComponentInChildren<TextMeshPro>().text = 
-                                (byte.Parse(button.name) - delta).ToString();
-                    }
-                    __instance.SetMaxPlayersButtons(__instance.GetTargetOptions().MaxPlayers);
-                }
-                
-                playerButtons.ForEach(b =>
-                {
-                    var button = b.GetComponent<PassiveButton>();
-                    button.OnClick.RemoveAllListeners();
-                    void defaultListener()
-                    {
-                        var value = byte.Parse(button.name);
-                        var targetOptions = __instance.GetTargetOptions();
-                        if (value <= targetOptions.NumImpostors)
+                        for (var i = 1; i < 11; i++)
                         {
-                            targetOptions.NumImpostors = value - 1;
-                            __instance.UpdateImpostorsButtons(targetOptions.NumImpostors);
+                            var playerButton = __instance.MaxPlayerButtons[i];
+
+                            var tmp = playerButton.GetComponentInChildren<TextMeshPro>();
+                            var newValue = Mathf.Max(byte.Parse(tmp.text) - 10, byte.Parse(playerButton.name));
+                            tmp.text = newValue.ToString();
                         }
-                        __instance.SetMaxPlayersButtons(value);
-                    } 
-                    button.OnClick.AddListener((UnityAction)defaultListener);
-                    button.transform.position += new Vector3(offset, 0, 0);
-                });
-                
-                playerButtons.Insert(0, minusButton);
-                playerButtons.Add(plusButton);
-                __instance.MaxPlayerButtons.Clear();
-                playerButtons.ForEach(b => __instance.MaxPlayerButtons.Add(b));
-                
-                #endregion
 
-                #region Impostor stuff
+                        __instance.UpdateMaxPlayersButtons(__instance.GetTargetOptions());
+                    }));
+                    firstButtonRenderer.Destroy();
 
-                var impostorButtons = __instance.ImpostorButtons.ToList();
-                
-                for (byte i = 4; i < 11; i++)
-                {
-                    var button = Object.Instantiate(impostorButtons.Last(), impostorButtons.Last().transform.parent);
-                    button.GetComponent<PassiveButton>().name = button.GetComponentInChildren<TextMeshPro>().text = i.ToString();
-                    button.transform.position += new Vector3(offset, 0, 0);
-                    impostorButtons.Add(button);
-                }
-                
-                impostorButtons.ForEach(b =>
-                {
-                    var button = b.GetComponent<PassiveButton>();
-                    button.OnClick.RemoveAllListeners();
-                    void defaultListener()
+                    var lastButtonRenderer = __instance.MaxPlayerButtons[__instance.MaxPlayerButtons.Count - 1];
+                    lastButtonRenderer.GetComponentInChildren<TextMeshPro>().text = "+";
+                    lastButtonRenderer.enabled = false;
+
+                    var lastButtonButton = lastButtonRenderer.GetComponent<PassiveButton>();
+                    lastButtonButton.OnClick.RemoveAllListeners();
+                    lastButtonButton.OnClick.AddListener((Action)(() =>
                     {
-                        var value = byte.Parse(button.name);
-                        if (value >= __instance.GetTargetOptions().MaxPlayers)
+                        for (var i = 1; i < 11; i++)
                         {
-                            return;
-                        }
-                        __instance.SetImpostorButtons(byte.Parse(button.name));
-                    }
-                    button.OnClick.AddListener((UnityAction)defaultListener);
-                });
+                            var playerButton = __instance.MaxPlayerButtons[i];
 
-                __instance.ImpostorButtons = impostorButtons.ToArray();
-                __instance.SetImpostorButtons(__instance.GetTargetOptions().NumImpostors);
-                
-                #endregion
+                            var tmp = playerButton.GetComponentInChildren<TextMeshPro>();
+                            var newValue = Mathf.Min(byte.Parse(tmp.text) + 10,
+                                CrowdedModPlugin.MaxPlayers - 14 + byte.Parse(playerButton.name));
+                            tmp.text = newValue.ToString();
+                        }
+
+                        __instance.UpdateMaxPlayersButtons(__instance.GetTargetOptions());
+                    }));
+                    lastButtonRenderer.Destroy();
+
+                    for (var i = 1; i < 11; i++)
+                    {
+                        var playerButton = __instance.MaxPlayerButtons[i].GetComponent<PassiveButton>();
+                        var text = playerButton.GetComponentInChildren<TextMeshPro>();
+
+                        playerButton.OnClick.RemoveAllListeners();
+                        playerButton.OnClick.AddListener((Action)(() =>
+                            __instance.SetMaxPlayersButtons(byte.Parse(text.text))));
+                    }
+                }
+
+                {
+                    var secondButtonRenderer = __instance.ImpostorButtons[1];
+                    var secondButton = secondButtonRenderer.gameObject;
+                    secondButtonRenderer.enabled = false;
+                    secondButton.transform.FindChild("ConsoleHighlight").gameObject.Destroy();
+                    secondButton.GetComponent<PassiveButton>().Destroy();
+                    secondButton.GetComponent<BoxCollider2D>().Destroy();
+
+                    var secondButtonText = secondButton.GetComponentInChildren<TextMeshPro>();
+
+                    var firstButtonRenderer = __instance.ImpostorButtons[0];
+                    firstButtonRenderer.enabled = false;
+                    firstButtonRenderer.GetComponentInChildren<TextMeshPro>().text = "-";
+
+                    var firstButton = firstButtonRenderer.GetComponent<PassiveButton>();
+                    firstButton.OnClick.RemoveAllListeners();
+                    firstButton.OnClick.AddListener((Action)(() =>
+                    {
+                        var newVal = Mathf.Max(byte.Parse(secondButtonText.text) - 1, 1);
+                        __instance.SetImpostorButtons(newVal);
+                        secondButtonText.text = newVal.ToString();
+                    }));
+
+                    var thirdButtonRenderer = __instance.ImpostorButtons[2];
+                    thirdButtonRenderer.enabled = false;
+                    thirdButtonRenderer.GetComponentInChildren<TextMeshPro>().text = "+";
+
+                    var thirdButton = thirdButtonRenderer.GetComponent<PassiveButton>();
+                    thirdButton.OnClick.RemoveAllListeners();
+                    thirdButton.OnClick.AddListener((Action)(() =>
+                    {
+                        var newVal = Mathf.Min(byte.Parse(secondButtonText.text) + 1, __instance.GetTargetOptions().MaxPlayers / 2);
+                        __instance.SetImpostorButtons(newVal);
+                        secondButtonText.text = newVal.ToString();
+                    }));
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.UpdateMaxPlayersButtons))]
+        public static class CreateOptionsPicker_UpdateMaxPlayersButtons
+        {
+            public static bool Prefix(CreateOptionsPicker __instance, [HarmonyArgument(0)] GameOptionsData opts)
+            {
+                if (__instance.CrewArea)
+                {
+                    __instance.CrewArea.SetCrewSize(opts.MaxPlayers, opts.numImpostors);
+                }
+
+                var selectedAsString = opts.MaxPlayers.ToString();
+                for (var i = 1; i < __instance.MaxPlayerButtons.Count - 1; i++)
+                {
+                    __instance.MaxPlayerButtons[i].enabled = __instance.MaxPlayerButtons[i].GetComponentInChildren<TextMeshPro>().text == selectedAsString;
+                }
+
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.UpdateImpostorsButtons))]
+        public static class CreateOptionsPicker_UpdateImpostorsButtons
+        {
+            public static bool Prefix()
+            {
+                return false;
             }
         }
 
