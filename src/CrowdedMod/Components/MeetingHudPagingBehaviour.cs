@@ -23,6 +23,12 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
     public override void Update()
     {
         base.Update();
+
+        if (MeetingHud.state is MeetingHud.VoteStates.Animating or MeetingHud.VoteStates.Proceeding)
+        {
+            return; // TimerText does not update there
+        }
+        
         MeetingHud.TimerText.text += $" ({Page + 1}/{MaxPage + 1})";
     }
 
