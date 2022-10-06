@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Reflection;
 using BepInEx;
 using BepInEx.IL2CPP;
 using HarmonyLib;
@@ -23,11 +22,6 @@ namespace CrowdedMod {
             GameOptionsData.MinPlayers = Enumerable.Repeat(4, 127).ToArray();
 
             Harmony.PatchAll();
-#if DEBUG
-            // Disable regionInfo watcher because it goes BRRR on multiple instances
-            var stupidWatcher = typeof(ReactorPlugin).GetProperty("RegionInfoWatcher", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(PluginSingleton<ReactorPlugin>.Instance);
-            stupidWatcher!.GetType().GetMethod("Dispose")!.Invoke(stupidWatcher, new object[]{});
-#endif
         }
     }
 }
