@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Reactor;
-using UnhollowerBaseLib.Attributes;
+using Il2CppInterop.Runtime.Attributes;
+using Reactor.Utilities.Attributes;
 using UnityEngine;
 
 namespace CrowdedMod.Components;

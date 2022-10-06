@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using CrowdedMod.Net;
 using HarmonyLib;
-using Reactor.Networking;
-using UnhollowerBaseLib;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Reactor.Networking.Rpc;
 using UnityEngine;
 
 namespace CrowdedMod.Patches {

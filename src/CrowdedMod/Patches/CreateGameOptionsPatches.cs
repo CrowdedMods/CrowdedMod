@@ -1,6 +1,6 @@
 ﻿using System;
 using HarmonyLib;
-using Reactor.Extensions;
+using Reactor.Utilities.Extensions;
 using TMPro;
 using UnityEngine;
 
