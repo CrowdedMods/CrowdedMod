@@ -14,7 +14,7 @@
         <GameVersion>2022.6.21</GameVersion>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Reactor" Version="2.0.0-ci.179" />
+        <PackageReference Include="Reactor" Version="2.0.0-ci.185" />
         <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.660" />
         <PackageReference Include="AmongUs.GameLibs.$(GamePlatform)" Version="$(GameVersion)" PrivateAssets="all" />
 
