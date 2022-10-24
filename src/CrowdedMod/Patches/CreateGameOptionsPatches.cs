@@ -138,19 +138,19 @@ namespace CrowdedMod.Patches
             }
         }
 
-        [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.GameHostOptions), MethodType.Getter)]
+        [HarmonyPatch(typeof(GameOptionsData), nameof(GameOptionsData.GameHostOptions), MethodType.Getter)]
         public static class SaveManager_get_GameHostOptions
         {
             public static bool Prefix(out GameOptionsData __result)
             {
-                SaveManager.hostOptionsData ??= SaveManager.LoadGameOptions("gameHostOptions");
+                GameOptionsData.hostOptionsData ??= GameOptionsData.LoadGameHostOptions();
 
                 // patched because of impostor clamping
-                SaveManager.hostOptionsData.NumImpostors = 
-                    Mathf.Clamp(SaveManager.hostOptionsData.NumImpostors, 1, SaveManager.hostOptionsData.MaxPlayers - 1);
-                SaveManager.hostOptionsData.KillDistance = Mathf.Clamp(SaveManager.hostOptionsData.KillDistance, 0, 2);
+                GameOptionsData.hostOptionsData.NumImpostors = 
+                    Mathf.Clamp(GameOptionsData.hostOptionsData.NumImpostors, 1, GameOptionsData.hostOptionsData.MaxPlayers - 1);
+                GameOptionsData.hostOptionsData.KillDistance = Mathf.Clamp(GameOptionsData.hostOptionsData.KillDistance, 0, 2);
 
-                __result = SaveManager.hostOptionsData;
+                __result = GameOptionsData.hostOptionsData;
                 return false;
             }
         }
