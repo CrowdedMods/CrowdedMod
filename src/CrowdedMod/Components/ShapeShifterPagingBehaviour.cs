@@ -14,11 +14,11 @@ public class ShapeShifterPagingBehaviour : AbstractPagingBehaviour
     {
     }
 
-    public ShapeshifterMinigame ShapeshifterMinigame = null!;
+    public ShapeshifterMinigame shapeshifterMinigame = null!;
     [HideFromIl2Cpp]
-    public IEnumerable<ShapeshifterPanel> Targets => ShapeshifterMinigame.potentialVictims.ToArray();
+    public IEnumerable<ShapeshifterPanel> Targets => shapeshifterMinigame.potentialVictims.ToArray();
 
-    public override int MaxPage => (Targets.Count() - 1) / MaxPerPage;
+    public override int MaxPageIndex => (Targets.Count() - 1) / MaxPerPage;
 
     public override void OnPageChanged()
     {
@@ -26,15 +26,15 @@ public class ShapeShifterPagingBehaviour : AbstractPagingBehaviour
 
         foreach (var panel in Targets)
         {
-            if (i >= Page * MaxPerPage && i < (Page + 1) * MaxPerPage) {
+            if (i >= PageIndex * MaxPerPage && i < (PageIndex + 1) * MaxPerPage) {
                 panel.gameObject.SetActive(true);
 
                 var relativeIndex = i % MaxPerPage;
                 var row = relativeIndex / 3;
                 var buttonTransform = panel.transform;
                 buttonTransform.localPosition = new Vector3(
-                                                    ShapeshifterMinigame.XStart + ShapeshifterMinigame.XOffset * (relativeIndex % 3),
-                                                    ShapeshifterMinigame.YStart + ShapeshifterMinigame.YOffset * row, 
+                                                    shapeshifterMinigame.XStart + shapeshifterMinigame.XOffset * (relativeIndex % 3),
+                                                    shapeshifterMinigame.YStart + shapeshifterMinigame.YOffset * row, 
                                                     buttonTransform.localPosition.z
                                                 );
             } else {
