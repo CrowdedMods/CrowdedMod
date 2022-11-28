@@ -24,10 +24,10 @@ Task("Build")
         settings.VersionSuffix = "ci." + buildId;
     }
 
-    foreach (var gamePlatform in new[] { "Steam", "Itch" })
+    foreach (var gamePlatform in new[] { "Steam" })
     {
         settings.MSBuildSettings.Properties["GamePlatform"] = new[] { gamePlatform };
-        DotNetCoreBuild("src", settings);
+        DotNetBuild("src", settings);
     }
 });
 

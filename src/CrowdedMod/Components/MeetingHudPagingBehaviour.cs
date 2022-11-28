@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Reactor;
-using UnhollowerBaseLib.Attributes;
+using Il2CppInterop.Runtime.Attributes;
+using Reactor.Utilities.Attributes;
 using UnityEngine;
 
 namespace CrowdedMod.Components;
@@ -14,22 +14,22 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
     {
     }
 
-    public MeetingHud MeetingHud = null!;
+    internal MeetingHud meetingHud = null!;
 
     [HideFromIl2Cpp]
-    public IEnumerable<PlayerVoteArea> Targets => MeetingHud.playerStates.OrderBy(p => p.AmDead);
-    public override int MaxPage => (Targets.Count() - 1) / MaxPerPage;
+    public IEnumerable<PlayerVoteArea> Targets => meetingHud.playerStates.OrderBy(p => p.AmDead);
+    public override int MaxPageIndex => (Targets.Count() - 1) / MaxPerPage;
 
     public override void Update()
     {
         base.Update();
 
-        if (MeetingHud.state is MeetingHud.VoteStates.Animating or MeetingHud.VoteStates.Proceeding)
+        if (meetingHud.state is MeetingHud.VoteStates.Animating or MeetingHud.VoteStates.Proceeding)
         {
             return; // TimerText does not update there
         }
         
-        MeetingHud.TimerText.text += $" ({Page + 1}/{MaxPage + 1})";
+        meetingHud.TimerText.text += $" ({PageIndex + 1}/{MaxPageIndex + 1})";
     }
 
     public override void OnPageChanged()
@@ -37,16 +37,16 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
         var i = 0;
 
         foreach (var button in Targets) {
-            if (i >= Page * MaxPerPage && i < (Page + 1) * MaxPerPage) {
+            if (i >= PageIndex * MaxPerPage && i < (PageIndex + 1) * MaxPerPage) {
                 button.gameObject.SetActive(true);
 
                 var relativeIndex = i % MaxPerPage;
                 var row = relativeIndex / 3;
                 var buttonTransform = button.transform;
-                buttonTransform.localPosition = MeetingHud.VoteOrigin +
+                buttonTransform.localPosition = meetingHud.VoteOrigin +
                                           new Vector3(
-                                              MeetingHud.VoteButtonOffsets.x * (relativeIndex % 3),
-                                              MeetingHud.VoteButtonOffsets.y * row, 
+                                              meetingHud.VoteButtonOffsets.x * (relativeIndex % 3),
+                                              meetingHud.VoteButtonOffsets.y * row, 
                                               buttonTransform.localPosition.z
                                           );
             } else {

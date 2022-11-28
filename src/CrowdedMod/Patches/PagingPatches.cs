@@ -9,7 +9,7 @@ namespace CrowdedMod.Patches {
         {
             public static void Postfix(MeetingHud __instance)
             {
-                __instance.gameObject.AddComponent<MeetingHudPagingBehaviour>().MeetingHud = __instance;
+                __instance.gameObject.AddComponent<MeetingHudPagingBehaviour>().meetingHud = __instance;
             }
         }
 
@@ -18,7 +18,7 @@ namespace CrowdedMod.Patches {
         {
             public static void Postfix(ShapeshifterMinigame __instance)
             {
-                __instance.gameObject.AddComponent<ShapeShifterPagingBehaviour>().ShapeshifterMinigame = __instance;
+                __instance.gameObject.AddComponent<ShapeShifterPagingBehaviour>().shapeshifterMinigame = __instance;
             }
         }
     }
