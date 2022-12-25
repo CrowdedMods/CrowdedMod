@@ -1,7 +1,7 @@
-﻿using Hazel;
+﻿using CrowdedMod;
+using Hazel;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
-
 namespace CrowdedMod.Net;
 
 [RegisterCustomRpc((uint) CustomRpcCalls.SetColor)]

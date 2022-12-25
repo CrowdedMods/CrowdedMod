@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using AmongUs.GameOptions;
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
@@ -18,8 +19,9 @@ namespace CrowdedMod {
 
         public override void Load()
         {
-            GameOptionsData.RecommendedImpostors = GameOptionsData.MaxImpostors = Enumerable.Repeat(127, 127).ToArray();
-            GameOptionsData.MinPlayers = Enumerable.Repeat(4, 127).ToArray();
+            NormalGameOptionsV07.RecommendedImpostors = NormalGameOptionsV07.MaxImpostors = Enumerable.Repeat(127, 127).ToArray();
+            NormalGameOptionsV07.MinPlayers = Enumerable.Repeat(4, 127).ToArray();
+
 
             Harmony.PatchAll();
         }

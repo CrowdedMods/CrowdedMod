@@ -68,7 +68,7 @@ namespace CrowdedMod.Patches {
             {
                 if (fixDummyCounterColor != null)
                 {
-                    __instance.PlayerCounter.text = $"{fixDummyCounterColor}{GameData.Instance.PlayerCount}/{PlayerControl.GameOptions.MaxPlayers}";
+                    __instance.PlayerCounter.text = $"{fixDummyCounterColor}{GameData.Instance.PlayerCount}/{GameManager.Instance.LogicOptions.MaxPlayers}";
                     fixDummyCounterColor = null;
                 }
             }
