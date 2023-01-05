@@ -12,7 +12,6 @@
     <PropertyGroup>
         <GamePlatform Condition="'$(GamePlatform)' == ''">Steam</GamePlatform>
         <GameVersion>2022.12.14</GameVersion>
-        <AmongUs>D:\RE\Among Us\v2022.12.14s\BepInEx</AmongUs>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Reactor" Version="2.1.0" />
