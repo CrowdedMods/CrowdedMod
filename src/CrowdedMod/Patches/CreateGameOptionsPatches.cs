@@ -38,7 +38,7 @@ namespace CrowdedMod.Patches
                     }));
                     firstButtonRenderer.Destroy();
 
-                    var lastButtonRenderer = __instance.MaxPlayerButtons[__instance.MaxPlayerButtons.Count - 1];
+                    var lastButtonRenderer = __instance.MaxPlayerButtons[^1];
                     lastButtonRenderer.GetComponentInChildren<TextMeshPro>().text = "+";
                     lastButtonRenderer.enabled = false;
 
@@ -67,49 +67,60 @@ namespace CrowdedMod.Patches
 
                         playerButton.OnClick.RemoveAllListeners();
                         playerButton.OnClick.AddListener((Action)(() =>
-                            __instance.SetMaxPlayersButtons(byte.Parse(text.text))));
+                        {
+                            var maxPlayers = byte.Parse(text.text);
+                            var maxImp = Mathf.Min(__instance.GetTargetOptions().NumImpostors, maxPlayers / 2);
+                            __instance.GetTargetOptions().SetInt(Int32OptionNames.NumImpostors, maxImp);
+                            __instance.ImpostorButtons[1].TextMesh.text = maxImp.ToString();
+                            __instance.SetMaxPlayersButtons(maxPlayers);
+                        }));
                     }
 
-                    for (var i = 0; i < __instance.MaxPlayerButtons.Count; i++) {
-                        __instance.MaxPlayerButtons[i].enabled = 
-                            __instance.MaxPlayerButtons[i].GetComponentInChildren<TextMeshPro>().text == __instance.GetTargetOptions().MaxPlayers.ToString();
+                    foreach (var button in __instance.MaxPlayerButtons)
+                    {
+                        button.enabled = 
+                            button.GetComponentInChildren<TextMeshPro>().text == __instance.GetTargetOptions().MaxPlayers.ToString();
                     }
                 }
 
                 {
-                    var secondButtonRenderer = __instance.ImpostorButtons[1];
-                    var secondButton = secondButtonRenderer.gameObject;
-                    secondButtonRenderer.enabled = false;
+                    var secondButton = __instance.ImpostorButtons[1];
+                    secondButton.SpriteRenderer.enabled = false;
                     secondButton.transform.FindChild("ConsoleHighlight").gameObject.Destroy();
-                    secondButton.GetComponent<PassiveButton>().Destroy();
-                    secondButton.GetComponent<BoxCollider2D>().Destroy();
+                    secondButton.PassiveButton.Destroy();
+                    secondButton.BoxCollider.Destroy();
 
-                    var secondButtonText = secondButton.GetComponentInChildren<TextMeshPro>();
-                    secondButtonText.text =
-                        __instance.GetTargetOptions().NumImpostors.ToString();
+                    var secondButtonText = secondButton.TextMesh;
+                    secondButtonText.text = __instance.GetTargetOptions().NumImpostors.ToString();
 
-                    var firstButtonRenderer = __instance.ImpostorButtons[0];
-                    firstButtonRenderer.enabled = false;
-                    firstButtonRenderer.GetComponentInChildren<TextMeshPro>().text = "-";
+                    var firstButton = __instance.ImpostorButtons[0];
+                    firstButton.SpriteRenderer.enabled = false;
+                    firstButton.TextMesh.text = "-";
 
-                    var firstButton = firstButtonRenderer.GetComponent<PassiveButton>();
-                    firstButton.OnClick.RemoveAllListeners();
-                    firstButton.OnClick.AddListener((Action)(() =>
-                    {
-                        var newVal = Mathf.Max(byte.Parse(secondButtonText.text) - 1, 1);
+                    var firstPassiveButton = firstButton.PassiveButton;
+                    firstPassiveButton.OnClick.RemoveAllListeners();
+                    firstPassiveButton.OnClick.AddListener((Action)(() => {
+                        var newVal = Mathf.Clamp(
+                            byte.Parse(secondButtonText.text) - 1,
+                            1,
+                            __instance.GetTargetOptions().MaxPlayers / 2
+                        );
                         __instance.SetImpostorButtons(newVal);
                         secondButtonText.text = newVal.ToString();
                     }));
 
-                    var thirdButtonRenderer = __instance.ImpostorButtons[2];
-                    thirdButtonRenderer.enabled = false;
-                    thirdButtonRenderer.GetComponentInChildren<TextMeshPro>().text = "+";
+                    var thirdButton = __instance.ImpostorButtons[2];
+                    thirdButton.SpriteRenderer.enabled = false;
+                    thirdButton.TextMesh.text = "+";
 
-                    var thirdButton = thirdButtonRenderer.GetComponent<PassiveButton>();
-                    thirdButton.OnClick.RemoveAllListeners();
-                    thirdButton.OnClick.AddListener((Action)(() =>
-                    {
-                        var newVal = Mathf.Min(byte.Parse(secondButtonText.text) + 1, __instance.GetTargetOptions().MaxPlayers / 2);
+                    var thirdPassiveButton = thirdButton.PassiveButton;
+                    thirdPassiveButton.OnClick.RemoveAllListeners();
+                    thirdPassiveButton.OnClick.AddListener((Action)(() => {
+                        var newVal = Mathf.Clamp(
+                            byte.Parse(secondButtonText.text) + 1,
+                            1,
+                            __instance.GetTargetOptions().MaxPlayers / 2
+                        );
                         __instance.SetImpostorButtons(newVal);
                         secondButtonText.text = newVal.ToString();
                     }));
