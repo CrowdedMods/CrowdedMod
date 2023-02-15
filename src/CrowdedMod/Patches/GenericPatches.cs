@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using AmongUs.GameOptions;
 using CrowdedMod.Net;
 using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
@@ -42,6 +43,21 @@ namespace CrowdedMod.Patches {
             }
         }
 
+        // I did not find a use of this method, but still patching for future updates
+        // maxExpectedPlayers is unknown, looks like server code tbh
+        [HarmonyPatch(typeof(GameOptionsData), nameof(GameOptionsData.AreInvalid))]
+        public static class InvalidOptionsPatches
+        {
+            public static bool Prefix(GameOptionsData __instance, [HarmonyArgument(0)] int maxExpectedPlayers)
+            {
+                return __instance.MaxPlayers > maxExpectedPlayers ||
+                       __instance.NumImpostors < 1 ||
+                       __instance.NumImpostors + 1 > maxExpectedPlayers / 2 ||
+                       __instance.KillDistance is < 0 or > 2 ||
+                       __instance.PlayerSpeedMod is <= 0f or > 3f;
+            }
+        }
+
         [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Update))]
         public static class GameStartManagerUpdatePatch
         {
@@ -79,15 +95,14 @@ namespace CrowdedMod.Patches {
         {
             public static void Postfix(PingTracker __instance)
             {
-                // __instance.text.autoSizeTextContainer = true; // 12.4s why?
-                __instance.text.text += "\n<color=#FFB793> CrowdedMod </color>";
+                __instance.text.text += "\n<color=#FFB793>CrowdedMod</color>";
             }
         }
 
         [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.OnEnable))]
         public static class GameSettingMenu_OnEnable // Credits to https://github.com/Galster-dev/GameSettingsUnlocker
         {
-            static void Prefix(ref GameSettingMenu __instance)
+            public static void Prefix(ref GameSettingMenu __instance)
             {
                 __instance.HideForOnline = new Il2CppReferenceArray<Transform>(0);
             }
