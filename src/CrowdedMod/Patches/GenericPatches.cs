@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using AmongUs.GameOptions;
 using CrowdedMod.Net;
 using HarmonyLib;
@@ -16,12 +16,11 @@ namespace CrowdedMod.Patches {
             }
         }
 
-        [HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.IsSelectedItemEquipped))]
+        [HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.Update))]
         public static class PlayerTabIsSelectedItemEquippedPatch {
-            public static bool Prefix(out bool __result)
+            public static void Postfix(PlayerTab __instance)
             {
-                __result = true;
-                return false;
+                __instance.currentColorIsEquipped = false;
             }
         }
 
