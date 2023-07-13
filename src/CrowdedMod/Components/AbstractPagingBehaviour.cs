@@ -41,13 +41,29 @@ public class AbstractPagingBehaviour : MonoBehaviour
 
     public virtual void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.mouseScrollDelta.y > 0f)
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.mouseScrollDelta.y > 0f)
         {
-            PageIndex = Mathf.Clamp(PageIndex - 1, 0, MaxPageIndex);
+            Cycle(false);
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.mouseScrollDelta.y < 0f)
+        else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.RightArrow) || Input.mouseScrollDelta.y < 0f)
         {
-            PageIndex = Mathf.Clamp(PageIndex + 1, 0, MaxPageIndex);
+            Cycle(true);
         }
+    }
+
+    //This function loops around if you go over the limits, so attempting to go up a page while on the first page will take you to the last page
+    public void Cycle(bool increment)
+    {
+        if (increment)
+        {
+            if (PageIndex + 1 > MaxPageIndex)
+                PageIndex = 0;
+            else
+                PageIndex++;
+        }
+        else if (PageIndex - 1 < 0)
+            PageIndex = MaxPageIndex;
+        else
+            PageIndex--;
     }
 }

@@ -30,7 +30,7 @@ namespace CrowdedMod.Patches
                             var playerButton = __instance.MaxPlayerButtons[i];
 
                             var tmp = playerButton.GetComponentInChildren<TextMeshPro>();
-                            var newValue = Mathf.Max(byte.Parse(tmp.text) - 10, byte.Parse(playerButton.name));
+                            var newValue = Mathf.Max(byte.Parse(tmp.text) - 10, byte.Parse(playerButton.name) - 2);
                             tmp.text = newValue.ToString();
                         }
 

@@ -21,5 +21,14 @@ namespace CrowdedMod.Patches {
                 __instance.gameObject.AddComponent<ShapeShifterPagingBehaviour>().shapeshifterMinigame = __instance;
             }
         }
+
+        [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Begin))]
+        public static class VitalsMinigameBeginPatch
+        {
+            public static void Postfix(VitalsMinigame __instance)
+            {
+                __instance.gameObject.AddComponent<VitalsPagingBehaviour>().vitalsMinigame = __instance;
+            }
+        }
     }
 }

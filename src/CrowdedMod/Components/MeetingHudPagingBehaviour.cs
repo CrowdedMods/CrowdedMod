@@ -42,10 +42,11 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
 
                 var relativeIndex = i % MaxPerPage;
                 var row = relativeIndex / 3;
+                var col = relativeIndex % 3;
                 var buttonTransform = button.transform;
                 buttonTransform.localPosition = meetingHud.VoteOrigin +
                                           new Vector3(
-                                              meetingHud.VoteButtonOffsets.x * (relativeIndex % 3),
+                                              meetingHud.VoteButtonOffsets.x * col,
                                               meetingHud.VoteButtonOffsets.y * row, 
                                               buttonTransform.localPosition.z
                                           );
