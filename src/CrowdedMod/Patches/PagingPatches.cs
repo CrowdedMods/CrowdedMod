@@ -1,8 +1,9 @@
 ﻿using HarmonyLib;
 using CrowdedMod.Components;
 
-namespace CrowdedMod.Patches {
-    internal static class PagingPatches 
+namespace CrowdedMod.Patches
+{
+    internal static class PagingPatches
     {
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
         public static class MeetingHudStartPatch

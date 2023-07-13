@@ -78,8 +78,7 @@ namespace CrowdedMod.Patches
 
                     foreach (var button in __instance.MaxPlayerButtons)
                     {
-                        button.enabled = 
-                            button.GetComponentInChildren<TextMeshPro>().text == __instance.GetTargetOptions().MaxPlayers.ToString();
+                        button.enabled = button.GetComponentInChildren<TextMeshPro>().text == __instance.GetTargetOptions().MaxPlayers.ToString();
                     }
                 }
 

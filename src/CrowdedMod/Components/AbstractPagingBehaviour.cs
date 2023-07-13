@@ -34,10 +34,7 @@ public class AbstractPagingBehaviour : MonoBehaviour
 
     public virtual void OnPageChanged() => throw new NotImplementedException();
 
-    public void Start()
-    {
-        OnPageChanged();
-    }
+    public virtual void Start() => OnPageChanged();
 
     public virtual void Update()
     {
@@ -51,8 +48,11 @@ public class AbstractPagingBehaviour : MonoBehaviour
         }
     }
 
-    //This function loops around if you go over the limits, so attempting to go up a page while on the first page will take you to the last page
-    public void Cycle(bool increment)
+    /// <summary>
+    /// Loops around if you go over the limits <br/>
+    /// Attempting to go up a page while on the first page will take you to the last page and vice versa
+    /// </summary>
+    public virtual void Cycle(bool increment)
     {
         if (increment)
         {

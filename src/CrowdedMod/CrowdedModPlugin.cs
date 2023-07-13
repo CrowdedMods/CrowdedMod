@@ -14,14 +14,13 @@ namespace CrowdedMod {
     {
         public const int MaxPlayers = 127;
         public const int MaxImpostors = 127 / 2;
-        
+
         private Harmony Harmony { get; } = new (Id);
 
         public override void Load()
         {
             NormalGameOptionsV07.RecommendedImpostors = NormalGameOptionsV07.MaxImpostors = Enumerable.Repeat(127, 127).ToArray();
             NormalGameOptionsV07.MinPlayers = Enumerable.Repeat(4, 127).ToArray();
-
 
             Harmony.PatchAll();
         }

@@ -88,7 +88,7 @@ namespace CrowdedMod.Patches {
                 }
             }
         }
-            
+
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
         public static class PingShowerPatch
         {

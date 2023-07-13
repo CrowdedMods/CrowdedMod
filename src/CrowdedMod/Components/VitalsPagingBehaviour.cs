@@ -4,7 +4,6 @@ using System.Linq;
 using Il2CppInterop.Runtime.Attributes;
 using TMPro;
 using Reactor.Utilities.Attributes;
-using UnityEngine;
 
 namespace CrowdedMod.Components;
 
@@ -20,22 +19,23 @@ public class VitalsPagingBehaviour : AbstractPagingBehaviour
     public override int MaxPageIndex => (Targets.Count() - 1) / MaxPerPage;
     private TextMeshPro PageText = null!;
 
+    public override void Start()
+    {
+        base.Start();
+        PageText = Instantiate(HudManager.Instance.KillButton.cooldownTimerText, vitalsMinigame.transform);
+        PageText.name = "MenuPageCount";
+        PageText.enableWordWrapping = false;
+        PageText.gameObject.SetActive(true);
+            PageText.transform.localPosition = new(2.7f, -2f, -1f);
+        PageText.transform.localScale *= 0.5f;
+    }
+
     public override void Update()
     {
         base.Update();
 
         if (PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(PlayerControl.LocalPlayer))
             return;
-
-        if (!PageText)
-        {
-            PageText = Instantiate(HudManager.Instance.KillButton.cooldownTimerText, vitalsMinigame.transform);
-            PageText.name = "MenuPageCount";
-            PageText.enableWordWrapping = false;
-            PageText.gameObject.SetActive(true);
-            PageText.transform.localPosition = new(2.6f, -2.06f, -51f);
-            PageText.transform.localScale *= 0.5f;
-        }
 
         PageText.text = $"({PageIndex + 1}/{MaxPageIndex + 1})";
     }

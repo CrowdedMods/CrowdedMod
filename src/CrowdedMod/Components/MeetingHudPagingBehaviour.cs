@@ -25,10 +25,8 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
         base.Update();
 
         if (meetingHud.state is MeetingHud.VoteStates.Animating or MeetingHud.VoteStates.Proceeding)
-        {
             return; // TimerText does not update there
-        }
-        
+
         meetingHud.TimerText.text += $" ({PageIndex + 1}/{MaxPageIndex + 1})";
     }
 
@@ -47,7 +45,7 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
                 buttonTransform.localPosition = meetingHud.VoteOrigin +
                                           new Vector3(
                                               meetingHud.VoteButtonOffsets.x * col,
-                                              meetingHud.VoteButtonOffsets.y * row, 
+                                              meetingHud.VoteButtonOffsets.y * row,
                                               buttonTransform.localPosition.z
                                           );
             } else {
