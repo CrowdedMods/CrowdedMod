@@ -32,14 +32,9 @@ public class ShapeShifterPagingBehaviour : AbstractPagingBehaviour
         PageText.transform.localScale *= 0.5f;
     }
 
-    public override void Update()
-    {
-        base.Update();
-        PageText.text = $"({PageIndex + 1}/{MaxPageIndex + 1})";
-    }
-
     public override void OnPageChanged()
     {
+        PageText.text = $"({PageIndex + 1}/{MaxPageIndex + 1})";
         var i = 0;
 
         foreach (var panel in Targets)

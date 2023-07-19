@@ -26,22 +26,13 @@ public class VitalsPagingBehaviour : AbstractPagingBehaviour
         PageText.name = "MenuPageCount";
         PageText.enableWordWrapping = false;
         PageText.gameObject.SetActive(true);
-            PageText.transform.localPosition = new(2.7f, -2f, -1f);
+        PageText.transform.localPosition = new(2.7f, -2f, -1f);
         PageText.transform.localScale *= 0.5f;
-    }
-
-    public override void Update()
-    {
-        base.Update();
-
-        if (PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(PlayerControl.LocalPlayer))
-            return;
-
-        PageText.text = $"({PageIndex + 1}/{MaxPageIndex + 1})";
     }
 
     public override void OnPageChanged()
     {
+        PageText.text = $"({PageIndex + 1}/{MaxPageIndex + 1})";
         var i = 0;
 
         foreach (var panel in Targets)
@@ -52,7 +43,11 @@ public class VitalsPagingBehaviour : AbstractPagingBehaviour
                 var relativeIndex = i % MaxPerPage;
                 var row = relativeIndex / 3;
                 var col = relativeIndex % 3;
-                panel.transform.localPosition = new(vitalsMinigame.XStart + (vitalsMinigame.XOffset * col), vitalsMinigame.YStart + (vitalsMinigame.YOffset * row), panel.transform.position.z);
+                panel.transform.localPosition = new(
+                                                    vitalsMinigame.XStart + (vitalsMinigame.XOffset * col),
+                                                    vitalsMinigame.YStart + (vitalsMinigame.YOffset * row),
+                                                    panel.transform.position.z
+                                                );
             }
             else
                 panel.gameObject.SetActive(false);
