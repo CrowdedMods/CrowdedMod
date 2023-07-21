@@ -4,11 +4,14 @@ using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using Reactor;
+using Reactor.Networking;
+using Reactor.Networking.Attributes;
 
 namespace CrowdedMod {
     [BepInAutoPlugin("xyz.crowdedmods.crowdedmod")]
     [BepInProcess("Among Us.exe")]
     [BepInDependency(ReactorPlugin.Id)]
+    [ReactorModFlags(ModFlags.RequireOnAllClients)]
     [BepInDependency("gg.reactor.debugger", BepInDependency.DependencyFlags.SoftDependency)] // fix debugger overwriting MinPlayers
     public partial class CrowdedModPlugin : BasePlugin
     {
