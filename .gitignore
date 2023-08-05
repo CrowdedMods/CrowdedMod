@@ -353,3 +353,6 @@ MigrationBackup/
 .ionide/
 Libs/*.dll
 RemovePlayerLimit/RemovePlayerLimit.csproj
+
+# VSC Stuff
+.vscode/

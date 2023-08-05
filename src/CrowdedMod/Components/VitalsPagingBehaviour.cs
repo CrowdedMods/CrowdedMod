@@ -32,6 +32,9 @@ public class VitalsPagingBehaviour : AbstractPagingBehaviour
 
     public override void OnPageChanged()
     {
+        if (PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(PlayerControl.LocalPlayer))
+            return;
+
         PageText.text = $"({PageIndex + 1}/{MaxPageIndex + 1})";
         var i = 0;
 
