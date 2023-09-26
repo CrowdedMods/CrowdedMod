@@ -23,7 +23,6 @@ public class ShapeShifterPagingBehaviour : AbstractPagingBehaviour
 
     public override void Start()
     {
-        base.Start();
         PageText = Instantiate(HudManager.Instance.KillButton.cooldownTimerText, shapeshifterMinigame.transform);
         PageText.name = "MenuPageCount";
         PageText.enableWordWrapping = false;

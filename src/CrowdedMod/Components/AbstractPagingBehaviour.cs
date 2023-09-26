@@ -5,8 +5,8 @@ namespace CrowdedMod.Components;
 
 // Interface until unhollower implements generic il2cpp (if it's possible)
 /// <summary>
-/// This class is not actually abstract because unhollower does not support it <br/>
-/// You need to implement <see cref="OnPageChanged"/> and <see cref="MaxPageIndex"/>
+/// This class is not actually abstract because unhollower does not support it.<br/>
+/// You need to implement <see cref="OnPageChanged"/> and <see cref="MaxPageIndex"/>.
 /// </summary>
 public class AbstractPagingBehaviour : MonoBehaviour
 {
@@ -39,31 +39,23 @@ public class AbstractPagingBehaviour : MonoBehaviour
     public virtual void Update()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.mouseScrollDelta.y > 0f)
-        {
             Cycle(false);
-        }
         else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.RightArrow) || Input.mouseScrollDelta.y < 0f)
-        {
             Cycle(true);
-        }
     }
 
     /// <summary>
-    /// Loops around if you go over the limits <br/>
-    /// Attempting to go up a page while on the first page will take you to the last page and vice versa
+    /// Loops around if you go over the limits.<br/>
+    /// Attempting to go up a page while on the first page will take you to the last page and vice versa.
     /// </summary>
     public virtual void Cycle(bool increment)
     {
-        if (increment)
-        {
-            if (PageIndex + 1 > MaxPageIndex)
-                PageIndex = 0;
-            else
-                PageIndex++;
-        }
-        else if (PageIndex - 1 < 0)
+        var change = increment ? 1 : -1;
+        PageIndex += change;
+
+        if (PageIndex > MaxPageIndex)
+            PageIndex = 0;
+        else if (PageIndex < 0)
             PageIndex = MaxPageIndex;
-        else
-            PageIndex--;
     }
 }

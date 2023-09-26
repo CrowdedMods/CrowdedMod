@@ -21,7 +21,6 @@ public class VitalsPagingBehaviour : AbstractPagingBehaviour
 
     public override void Start()
     {
-        base.Start();
         PageText = Instantiate(HudManager.Instance.KillButton.cooldownTimerText, vitalsMinigame.transform);
         PageText.name = "MenuPageCount";
         PageText.enableWordWrapping = false;

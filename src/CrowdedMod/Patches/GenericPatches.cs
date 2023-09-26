@@ -2,9 +2,7 @@ using System.Linq;
 using AmongUs.GameOptions;
 using CrowdedMod.Net;
 using HarmonyLib;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Reactor.Networking.Rpc;
-using UnityEngine;
 
 namespace CrowdedMod.Patches {
     internal static class GenericPatches {
@@ -103,7 +101,7 @@ namespace CrowdedMod.Patches {
         {
             public static void Prefix(ref GameSettingMenu __instance)
             {
-                __instance.HideForOnline = new Il2CppReferenceArray<Transform>(0);
+                __instance.HideForOnline = new(0);
             }
         }
 

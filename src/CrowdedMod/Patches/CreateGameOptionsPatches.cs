@@ -132,10 +132,7 @@ namespace CrowdedMod.Patches
         {
             public static bool Prefix(CreateOptionsPicker __instance, [HarmonyArgument(0)] IGameOptions opts)
             {
-                if (__instance.CrewArea)
-                {
-                    __instance.CrewArea.SetCrewSize(opts.MaxPlayers, opts.NumImpostors);
-                }
+                __instance.CrewArea?.SetCrewSize(opts.MaxPlayers, opts.NumImpostors);
 
                 var selectedAsString = opts.MaxPlayers.ToString();
                 for (var i = 1; i < __instance.MaxPlayerButtons.Count - 1; i++)
