@@ -29,6 +29,7 @@ public class ShapeShifterPagingBehaviour : AbstractPagingBehaviour
         PageText.gameObject.SetActive(true);
         PageText.transform.localPosition = new(4.1f, -2.36f, -1f);
         PageText.transform.localScale *= 0.5f;
+        OnPageChanged();
     }
 
     public override void OnPageChanged()

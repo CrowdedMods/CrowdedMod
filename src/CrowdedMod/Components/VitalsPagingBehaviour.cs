@@ -27,6 +27,7 @@ public class VitalsPagingBehaviour : AbstractPagingBehaviour
         PageText.gameObject.SetActive(true);
         PageText.transform.localPosition = new(2.7f, -2f, -1f);
         PageText.transform.localScale *= 0.5f;
+        OnPageChanged();
     }
 
     public override void OnPageChanged()
