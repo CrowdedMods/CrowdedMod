@@ -14,6 +14,8 @@ public class AbstractPagingBehaviour : MonoBehaviour
     {
     }
 
+    public const string PAGE_INDEX_GAME_OBJECT_NAME = "CrowdedMod_PageIndex";
+
     private int _page;
 
     public virtual int MaxPerPage => 15;
@@ -51,11 +53,6 @@ public class AbstractPagingBehaviour : MonoBehaviour
     public virtual void Cycle(bool increment)
     {
         var change = increment ? 1 : -1;
-        PageIndex += change;
-
-        if (PageIndex > MaxPageIndex)
-            PageIndex = 0;
-        else if (PageIndex < 0)
-            PageIndex = MaxPageIndex;
+        PageIndex = Mathf.Clamp(PageIndex + change, 0, MaxPageIndex);
     }
 }
