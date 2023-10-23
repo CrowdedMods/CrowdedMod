@@ -1,5 +1,4 @@
-﻿using CrowdedMod;
-using Hazel;
+﻿using Hazel;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 namespace CrowdedMod.Net;
