@@ -8,7 +8,6 @@
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
         <Nullable>enable</Nullable>
-        <AmongUs>H:\amogus\latest idfk\Among Us</AmongUs>
     </PropertyGroup>
     <PropertyGroup>
         <GamePlatform Condition="'$(GamePlatform)' == ''">Steam</GamePlatform>
