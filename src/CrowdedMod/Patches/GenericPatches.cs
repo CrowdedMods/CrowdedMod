@@ -164,10 +164,13 @@ internal static class GenericPatches {
     {
         public static void Postfix(ref GameOptionsMenu __instance)
         {
-            __instance.GetComponentsInChildren<NumberOption>()
-                .First(o => o.Title == StringNames.GameNumImpostors)
-                // ReSharper disable once PossibleLossOfFraction
-                .ValidRange = new FloatRange(1, CrowdedModPlugin.MaxImpostors);
+            var numberOptions = __instance.GetComponentsInChildren<NumberOption>();
+
+            if (numberOptions.Any(o => o.Title == StringNames.GameNumImpostors))
+            {
+                numberOptions.First(o => o.Title == StringNames.GameNumImpostors)
+                    .ValidRange = new FloatRange(1, CrowdedModPlugin.MaxImpostors);
+            }
         }
     }
 }
