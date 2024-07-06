@@ -155,4 +155,37 @@ internal static class CreateGameOptionsPatches
             return false;
         }
     }
+
+    [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.SetImpostorButtons))]
+    public static class CreateOptionsPicker_SetImpostorButtons
+    {
+        public static bool Prefix(CreateOptionsPicker __instance, int numImpostors)
+        {
+            IGameOptions targetOptions = __instance.GetTargetOptions();
+            targetOptions.SetInt(Int32OptionNames.NumImpostors, numImpostors);
+            __instance.SetTargetOptions(targetOptions);
+            __instance.UpdateImpostorsButtons(numImpostors);
+
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.SetMaxPlayersButtons))]
+    public static class CreateOptionsPicker_SetMaxPlayersButtons
+    {
+        public static bool Prefix(CreateOptionsPicker __instance, int maxPlayers)
+        {
+            if (DestroyableSingleton<FindAGameManager>.InstanceExists)
+            {
+                return true;
+            }
+
+            IGameOptions targetOptions = __instance.GetTargetOptions();
+            targetOptions.SetInt(Int32OptionNames.MaxPlayers, maxPlayers);
+            __instance.SetTargetOptions(targetOptions);
+            __instance.UpdateMaxPlayersButtons(targetOptions);
+
+            return false;
+        }
+    }
 }
