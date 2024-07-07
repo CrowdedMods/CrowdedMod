@@ -1,7 +1,7 @@
-﻿using System;
-using AmongUs.GameOptions;
+﻿using AmongUs.GameOptions;
 using HarmonyLib;
 using Reactor.Utilities.Extensions;
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -98,7 +98,8 @@ internal static class CreateGameOptionsPatches
 
                 var firstPassiveButton = firstButton.PassiveButton;
                 firstPassiveButton.OnClick.RemoveAllListeners();
-                firstPassiveButton.OnClick.AddListener((Action)(() => {
+                firstPassiveButton.OnClick.AddListener((Action)(() =>
+                {
                     var newVal = Mathf.Clamp(
                         byte.Parse(secondButtonText.text) - 1,
                         1,
@@ -114,7 +115,8 @@ internal static class CreateGameOptionsPatches
 
                 var thirdPassiveButton = thirdButton.PassiveButton;
                 thirdPassiveButton.OnClick.RemoveAllListeners();
-                thirdPassiveButton.OnClick.AddListener((Action)(() => {
+                thirdPassiveButton.OnClick.AddListener((Action)(() =>
+                {
                     var newVal = Mathf.Clamp(
                         byte.Parse(secondButtonText.text) + 1,
                         1,
@@ -155,37 +157,5 @@ internal static class CreateGameOptionsPatches
             return false;
         }
     }
-
-    [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.SetImpostorButtons))]
-    public static class CreateOptionsPicker_SetImpostorButtons
-    {
-        public static bool Prefix(CreateOptionsPicker __instance, int numImpostors)
-        {
-            IGameOptions targetOptions = __instance.GetTargetOptions();
-            targetOptions.SetInt(Int32OptionNames.NumImpostors, numImpostors);
-            __instance.SetTargetOptions(targetOptions);
-            __instance.UpdateImpostorsButtons(numImpostors);
-
-            return false;
-        }
-    }
-
-    [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.SetMaxPlayersButtons))]
-    public static class CreateOptionsPicker_SetMaxPlayersButtons
-    {
-        public static bool Prefix(CreateOptionsPicker __instance, int maxPlayers)
-        {
-            if (DestroyableSingleton<FindAGameManager>.InstanceExists)
-            {
-                return true;
-            }
-
-            IGameOptions targetOptions = __instance.GetTargetOptions();
-            targetOptions.SetInt(Int32OptionNames.MaxPlayers, maxPlayers);
-            __instance.SetTargetOptions(targetOptions);
-            __instance.UpdateMaxPlayersButtons(targetOptions);
-
-            return false;
-        }
-    }
 }
+

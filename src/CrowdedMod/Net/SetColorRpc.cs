@@ -3,7 +3,7 @@ using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 namespace CrowdedMod.Net;
 
-[RegisterCustomRpc((uint) CustomRpcCalls.SetColor)]
+[RegisterCustomRpc((uint)CustomRpcCalls.SetColor)]
 public class SetColorRpc : PlayerCustomRpc<CrowdedModPlugin, byte>
 {
     public SetColorRpc(CrowdedModPlugin plugin, uint id) : base(plugin, id)

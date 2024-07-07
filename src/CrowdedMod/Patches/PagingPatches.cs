@@ -1,5 +1,5 @@
-﻿using HarmonyLib;
-using CrowdedMod.Components;
+﻿using CrowdedMod.Components;
+using HarmonyLib;
 
 namespace CrowdedMod.Patches;
 

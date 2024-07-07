@@ -1,24 +1,26 @@
-using System.Linq;
 using AmongUs.GameOptions;
 using CrowdedMod.Net;
 using HarmonyLib;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Reactor.Networking.Rpc;
-using UnityEngine;
+using System.Linq;
 
 namespace CrowdedMod.Patches;
 
-internal static class GenericPatches {
+internal static class GenericPatches
+{
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdCheckColor))]
-    public static class PlayerControlCmdCheckColorPatch {
-        public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] byte colorId) {
+    public static class PlayerControlCmdCheckColorPatch
+    {
+        public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] byte colorId)
+        {
             Rpc<SetColorRpc>.Instance.Send(__instance, colorId);
             return false;
         }
     }
 
     [HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.Update))]
-    public static class PlayerTabIsSelectedItemEquippedPatch {
+    public static class PlayerTabIsSelectedItemEquippedPatch
+    {
         public static void Postfix(PlayerTab __instance)
         {
             __instance.currentColorIsEquipped = false;
@@ -33,7 +35,7 @@ internal static class GenericPatches {
             __instance.AvailableColors.Clear();
             for (var i = 0; i < Palette.PlayerColors.Count; i++)
             {
-                if(!PlayerControl.LocalPlayer || PlayerControl.LocalPlayer.CurrentOutfit.ColorId != i)
+                if (!PlayerControl.LocalPlayer || PlayerControl.LocalPlayer.CurrentOutfit.ColorId != i)
                 {
                     __instance.AvailableColors.Add(i);
                 }
@@ -72,7 +74,8 @@ internal static class GenericPatches {
             if (__instance.LastPlayerCount > __instance.MinPlayers)
             {
                 fixDummyCounterColor = "<color=#00FF00FF>";
-            } else if (__instance.LastPlayerCount == __instance.MinPlayers)
+            }
+            else if (__instance.LastPlayerCount == __instance.MinPlayers)
             {
                 fixDummyCounterColor = "<color=#FFFF00FF>";
             }
@@ -88,7 +91,7 @@ internal static class GenericPatches {
             {
                 return;
             }
-            
+
             __instance.PlayerCounter.text = $"{fixDummyCounterColor}{GameData.Instance.PlayerCount}/{GameManager.Instance.LogicOptions.MaxPlayers}";
             fixDummyCounterColor = null;
         }
@@ -157,11 +160,12 @@ internal static class GenericPatches {
         {
             var numberOptions = __instance.GetComponentsInChildren<NumberOption>();
 
-            if (numberOptions.Any(o => o.Title == StringNames.GameNumImpostors))
+            var impostorsOption = numberOptions.FirstOrDefault(o => o.Title == StringNames.GameNumImpostors);
+            if (impostorsOption != null)
             {
-                numberOptions.First(o => o.Title == StringNames.GameNumImpostors)
-                    .ValidRange = new FloatRange(1, CrowdedModPlugin.MaxImpostors);
+                impostorsOption.ValidRange = new FloatRange(1, CrowdedModPlugin.MaxImpostors);
             }
+
         }
     }
 }

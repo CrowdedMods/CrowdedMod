@@ -1,8 +1,8 @@
+using Il2CppInterop.Runtime.Attributes;
+using Reactor.Utilities.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Il2CppInterop.Runtime.Attributes;
-using Reactor.Utilities.Attributes;
 using UnityEngine;
 
 namespace CrowdedMod.Components;
@@ -36,8 +36,10 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
     {
         var i = 0;
 
-        foreach (var button in Targets) {
-            if (i >= PageIndex * MaxPerPage && i < (PageIndex + 1) * MaxPerPage) {
+        foreach (var button in Targets)
+        {
+            if (i >= PageIndex * MaxPerPage && i < (PageIndex + 1) * MaxPerPage)
+            {
                 button.gameObject.SetActive(true);
 
                 var relativeIndex = i % MaxPerPage;
@@ -50,7 +52,9 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
                                               meetingHud.VoteButtonOffsets.y * row,
                                               buttonTransform.localPosition.z
                                           );
-            } else {
+            }
+            else
+            {
                 button.gameObject.SetActive(false);
             }
             i++;
