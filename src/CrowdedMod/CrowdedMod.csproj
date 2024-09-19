@@ -21,6 +21,9 @@
         <PackageReference Include="BepInEx.AutoPlugin" Version="1.1.0" PrivateAssets="all" />
         <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="2.0.1" PrivateAssets="all" />
     </ItemGroup>
+    <ItemGroup>
+      <PackageReference Update="AmongUs.GameLibs.Steam" Version="2024.9.4" />
+    </ItemGroup>
     
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
