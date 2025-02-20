@@ -63,7 +63,7 @@ internal static class GenericPatches
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Update))]
     public static class GameStartManagerUpdatePatch
     {
-        private static string? fixDummyCounterColor;
+        private static string fixDummyCounterColor = string.Empty;
         public static void Prefix(GameStartManager __instance)
         {
             if (GameData.Instance == null || __instance.LastPlayerCount == GameData.Instance.PlayerCount)
@@ -87,13 +87,16 @@ internal static class GenericPatches
 
         public static void Postfix(GameStartManager __instance)
         {
-            if (fixDummyCounterColor == null)
+            if (GameData.Instance == null ||
+                GameManager.Instance == null ||
+                GameManager.Instance.LogicOptions == null ||
+                string.IsNullOrEmpty(fixDummyCounterColor))
             {
                 return;
             }
 
             __instance.PlayerCounter.text = $"{fixDummyCounterColor}{GameData.Instance.PlayerCount}/{GameManager.Instance.LogicOptions.MaxPlayers}";
-            fixDummyCounterColor = null;
+            fixDummyCounterColor = string.Empty;
         }
     }
 
@@ -138,7 +141,7 @@ internal static class GenericPatches
     //             {
     //                 Debug.LogError("[CM] InnerNetServer::HandleNewGameJoin MessageWriter 2 Exception: " +
     //                                exception.Message);
-    //                 // ama too stupid for this 
+    //                 // ama too stupid for this
     //                 // Debug.LogException(exception.InnerException, __instance);
     //             }
     //             finally
