@@ -1,11 +1,6 @@
 ﻿name: CI
 
-on:
-  push:
-  pull_request:
-  create:
-    tags:
-      - "*"
+on: [ "push", "pull_request" ]
 
 jobs:
   build:
@@ -19,7 +14,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 9.x
+          dotnet-version: 8.x
 
       - name: Run the Cake script
         uses: cake-build/cake-action@v1
@@ -31,40 +26,8 @@ jobs:
           name: CrowdedMod.dll
           path: src/CrowdedMod/bin/Release/net6.0/CrowdedMod.dll
 
-  release:
-    needs: build
-    if: startsWith(github.ref, 'refs/tags/')
-    runs-on: ubuntu-20.04
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Download built artifact
-        uses: actions/download-artifact@v4
+      - uses: softprops/action-gh-release@v1
+        if: github.ref_type == 'tag'
         with:
-          name: CrowdedMod.dll
-          path: artifacts/
-
-      - name: Get tag name
-        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.TAG_NAME }}
-          release_name: Release ${{ env.TAG_NAME }}
-          draft: false
-          prerelease: false
-
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: artifacts/CrowdedMod.dll
-          asset_name: CrowdedMod.dll
-          asset_content_type: application/octet-stream
+          draft: true
+          files: src/CrowdedMod/bin/Release/net6.0/CrowdedMod.dll
