@@ -5,6 +5,7 @@ using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
+using System.Linq;
 
 namespace CrowdedMod;
 
@@ -27,5 +28,29 @@ public partial class CrowdedModPlugin : BasePlugin
         ReactorCredits.Register<CrowdedModPlugin>(ReactorCredits.AlwaysShow);
 
         Harmony.PatchAll();
+
+        RemoveVanillaServer();
     }
+
+    public static void RemoveVanillaServer()
+    {
+        var sm = ServerManager.Instance;
+        var curRegions = sm.AvailableRegions;
+        sm.AvailableRegions = curRegions.Where(region => !IsVanillaServer(region)).ToArray();
+
+        var defaultRegion = ServerManager.DefaultRegions;
+        ServerManager.DefaultRegions = defaultRegion.Where(region => !IsVanillaServer(region)).ToArray();
+
+        if (IsVanillaServer(sm.CurrentRegion))
+        {
+            var region = defaultRegion.FirstOrDefault();
+            sm.SetRegion(region);
+        }
+    }
+
+    private static bool IsVanillaServer(IRegionInfo regionInfo)
+        => regionInfo.TranslateName is
+            StringNames.ServerAS or
+            StringNames.ServerEU or
+            StringNames.ServerNA;
 }
