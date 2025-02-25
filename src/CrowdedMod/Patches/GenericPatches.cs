@@ -2,25 +2,47 @@ using System.Linq;
 using AmongUs.GameOptions;
 using CrowdedMod.Net;
 using HarmonyLib;
+using Hazel;
+using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Il2CppSystem.Reflection;
+using InnerNet;
 using Reactor.Networking.Rpc;
+using Reactor.Utilities;
 using UnityEngine;
 
 namespace CrowdedMod.Patches;
 
-internal static class GenericPatches {
+internal static class GenericPatches
+{
+    private static bool ShouldDisableColorPatch => CrowdedModPlugin.ForceDisableFreeColor ||
+                                                   GameData.Instance.PlayerCount <= Palette.PlayerColors.Length;
+
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdCheckColor))]
-    public static class PlayerControlCmdCheckColorPatch {
-        public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] byte colorId) {
+    public static class PlayerControlCmdCheckColorPatch
+    {
+        public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] byte colorId)
+        {
+            if (ShouldDisableColorPatch)
+            {
+                return true;
+            }
+
             Rpc<SetColorRpc>.Instance.Send(__instance, colorId);
             return false;
         }
     }
 
     [HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.Update))]
-    public static class PlayerTabIsSelectedItemEquippedPatch {
+    public static class PlayerTabIsSelectedItemEquippedPatch
+    {
         public static void Postfix(PlayerTab __instance)
         {
+            if (ShouldDisableColorPatch)
+            {
+                return;
+            }
+
             __instance.currentColorIsEquipped = false;
         }
     }
@@ -30,10 +52,15 @@ internal static class GenericPatches {
     {
         public static bool Prefix(PlayerTab __instance)
         {
+            if (ShouldDisableColorPatch)
+            {
+                return true;
+            }
+
             __instance.AvailableColors.Clear();
             for (var i = 0; i < Palette.PlayerColors.Count; i++)
             {
-                if(!PlayerControl.LocalPlayer || PlayerControl.LocalPlayer.CurrentOutfit.ColorId != i)
+                if (!PlayerControl.LocalPlayer || PlayerControl.LocalPlayer.CurrentOutfit.ColorId != i)
                 {
                     __instance.AvailableColors.Add(i);
                 }
@@ -61,7 +88,8 @@ internal static class GenericPatches {
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Update))]
     public static class GameStartManagerUpdatePatch
     {
-        private static string? fixDummyCounterColor;
+        private static string fixDummyCounterColor = string.Empty;
+
         public static void Prefix(GameStartManager __instance)
         {
             if (GameData.Instance == null || __instance.LastPlayerCount == GameData.Instance.PlayerCount)
@@ -72,7 +100,8 @@ internal static class GenericPatches {
             if (__instance.LastPlayerCount > __instance.MinPlayers)
             {
                 fixDummyCounterColor = "<color=#00FF00FF>";
-            } else if (__instance.LastPlayerCount == __instance.MinPlayers)
+            }
+            else if (__instance.LastPlayerCount == __instance.MinPlayers)
             {
                 fixDummyCounterColor = "<color=#FFFF00FF>";
             }
@@ -84,90 +113,133 @@ internal static class GenericPatches {
 
         public static void Postfix(GameStartManager __instance)
         {
-            if (fixDummyCounterColor == null)
+            if (string.IsNullOrEmpty(fixDummyCounterColor) || 
+                GameData.Instance == null ||
+                GameManager.Instance?.LogicOptions == null)
             {
                 return;
             }
+
+            __instance.PlayerCounter.text =
+                $"{fixDummyCounterColor}{GameData.Instance.PlayerCount}/{GameManager.Instance.LogicOptions.MaxPlayers}";
+            fixDummyCounterColor = string.Empty;
+        }
+    }
+
+    [HarmonyPatch(typeof(InnerNetServer), nameof(InnerNetServer.HandleNewGameJoin))]
+    public static class InnerNetSerer_HandleNewGameJoin
+    {
+        public static bool Prefix(InnerNetServer __instance, [HarmonyArgument(0)] InnerNetServer.Player client)
+        {
+            if (__instance.Clients.Count is < 15 or >= CrowdedModPlugin.MaxPlayers) return true;
+
+            __instance.Clients.Add(client);
+
+            client.LimboState = LimboStates.PreSpawn;
+            if (__instance.HostId == -1)
+            {
+                __instance.HostId = __instance.Clients.ToArray()[0].Id;
+            }
+
+            if (__instance.HostId == client.Id)
+            {
+                client.LimboState = LimboStates.NotLimbo;
+            }
+
+            var writer = MessageWriter.Get(SendOption.Reliable);
+            try
+            {
+                __instance.WriteJoinedMessage(client, writer, true);
+                client.Connection.Send(writer);
+                __instance.BroadcastJoinMessage(client, writer);
+            }
+            catch (Il2CppException exception)
+            {
+                Debug.LogError("[CM] InnerNetServer::HandleNewGameJoin MessageWriter 2 Exception: " +
+                               exception.Message);
+                // Debug.LogException(exception, __instance);
+            }
+            finally
+            {
+                writer.Recycle();
+            }
+
+            return false;
+        }
+    }
+    
+    private static void TryAdjustOptionsRecommendations(GameOptionsManager manager)
+    {
+        const int MaxPlayers = CrowdedModPlugin.MaxPlayers;
+        var type = manager.GetGameOptions();
+        var options = manager.GameHostOptions.Cast<Il2CppSystem.Object>();
+
+        var maxRecommendation = ((Il2CppStructArray<int>)Enumerable.Repeat(MaxPlayers, MaxPlayers + 1).ToArray())
+            .Cast<Il2CppSystem.Object>();
+        var minRecommendation = ((Il2CppStructArray<int>)Enumerable.Repeat(4, MaxPlayers + 1).ToArray())
+            .Cast<Il2CppSystem.Object>();
+        var killRecommendation = ((Il2CppStructArray<int>)Enumerable.Repeat(0, MaxPlayers + 1).ToArray())
+            .Cast<Il2CppSystem.Object>();
+
             
-            __instance.PlayerCounter.text = $"{fixDummyCounterColor}{GameData.Instance.PlayerCount}/{GameManager.Instance.LogicOptions.MaxPlayers}";
-            fixDummyCounterColor = null;
+        const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
+        // all these fields are currently static, but we're doing a forward compat
+        // static fields ignore object param so non-null instance is ok
+        type.GetField("RecommendedImpostors", flags)?.SetValue(options, maxRecommendation);
+        type.GetField("MaxImpostors", flags)?.SetValue(options, maxRecommendation);
+        type.GetField("RecommendedKillCooldown", flags)?.SetValue(options, killRecommendation);
+        type.GetField("MinPlayers", flags)?.SetValue(options, minRecommendation);
+    }
+
+    [HarmonyPatch(typeof(GameOptionsManager), nameof(GameOptionsManager.GameHostOptions), MethodType.Setter)]
+    public static class GameOptionsManager_set_GameHostOptions
+    {
+
+        public static void Postfix(GameOptionsManager __instance)
+        {
+            try
+            {
+                TryAdjustOptionsRecommendations(__instance);
+            }
+            catch (System.Exception e)
+            {
+                Logger<CrowdedModPlugin>.Error($"Failed to adjust options recommendations: {e}");
+            }
+        }
+    }
+    
+    [HarmonyPatch(typeof(GameOptionsManager), nameof(GameOptionsManager.SwitchGameMode))]
+    public static class GameOptionsManager_SwitchGameMode
+    {
+        public static void Postfix(GameOptionsManager __instance)
+        {
+            try
+            {
+                TryAdjustOptionsRecommendations(__instance);
+            }
+            catch (System.Exception e)
+            {
+                Logger<CrowdedModPlugin>.Error($"Failed to adjust options recommendations: {e}");
+            }
         }
     }
 
-    [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
-    public static class PingShowerPatch
+    [HarmonyPatch(typeof(GameManager), nameof(GameManager.Awake))]
+    public static class GameManager_Awake
     {
-        public static void Postfix(PingTracker __instance)
+        public static void Postfix(GameManager __instance)
         {
-            __instance.text.text += "\n<color=#FFB793>CrowdedMod</color>";
-        }
-    }
-
-    [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.OnEnable))]
-    public static class GameSettingMenu_OnEnable // Credits to https://github.com/Galster-dev/GameSettingsUnlocker
-    {
-        public static void Prefix(ref GameSettingMenu __instance)
-        {
-            __instance.HideForOnline = new Il2CppReferenceArray<Transform>(0);
-        }
-    }
-
-    // Will be patched with signatures later when BepInEx reveals it
-    // [HarmonyPatch(typeof(InnerNetServer), nameof(InnerNetServer.HandleNewGameJoin))]
-    // public static class InnerNetSerer_HandleNewGameJoin
-    // {
-    //     public static bool Prefix(InnerNetServer __instance, [HarmonyArgument(0)] InnerNetServer.Player client)
-    //     {
-    //         if (__instance.Clients.Count >= 15)
-    //         {
-    //             __instance.Clients.Add(client);
-    //
-    //             client.LimboState = LimboStates.PreSpawn;
-    //             if (__instance.HostId == -1)
-    //             {
-    //                 __instance.HostId = __instance.Clients.ToArray()[0].Id;
-    //
-    //                 if (__instance.HostId == client.Id)
-    //                 {
-    //                     client.LimboState = LimboStates.NotLimbo;
-    //                 }
-    //             }
-    //
-    //             var writer = MessageWriter.Get(SendOption.Reliable);
-    //             try
-    //             {
-    //                 __instance.WriteJoinedMessage(client, writer, true);
-    //                 client.Connection.Send(writer);
-    //                 __instance.BroadcastJoinMessage(client, writer);
-    //             }
-    //             catch (Il2CppException exception)
-    //             {
-    //                 Debug.LogError("[CM] InnerNetServer::HandleNewGameJoin MessageWriter 2 Exception: " +
-    //                                exception.Message);
-    //                 // ama too stupid for this 
-    //                 // Debug.LogException(exception.InnerException, __instance);
-    //             }
-    //             finally
-    //             {
-    //                 writer.Recycle();
-    //             }
-    //
-    //             return false;
-    //         }
-    //
-    //         return true;
-    //     }
-    // }
-
-    [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
-    public static class GameOptionsMenu_Start
-    {
-        public static void Postfix(ref GameOptionsMenu __instance)
-        {
-            __instance.GetComponentsInChildren<NumberOption>()
-                .First(o => o.Title == StringNames.GameNumImpostors)
-                // ReSharper disable once PossibleLossOfFraction
-                .ValidRange = new FloatRange(1, CrowdedModPlugin.MaxImpostors);
+            foreach (var category in __instance.GameSettingsList.AllCategories)
+            {
+                foreach (var option in category.AllGameSettings)
+                {
+                    if (option is IntGameSetting intOption && option.Title == StringNames.GameNumImpostors)
+                    {
+                        intOption.ValidRange = new IntRange(1, CrowdedModPlugin.MaxImpostors);
+                        return;
+                    }
+                }
+            }
         }
     }
 }

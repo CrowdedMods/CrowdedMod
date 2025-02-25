@@ -16,8 +16,7 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
 
     internal MeetingHud meetingHud = null!;
 
-    [HideFromIl2Cpp]
-    public IEnumerable<PlayerVoteArea> Targets => meetingHud.playerStates.OrderBy(p => p.AmDead);
+    [HideFromIl2Cpp] public IEnumerable<PlayerVoteArea> Targets => meetingHud.playerStates.OrderBy(p => p.AmDead);
     public override int MaxPageIndex => (Targets.Count() - 1) / MaxPerPage;
 
     public override void Start() => OnPageChanged();
@@ -26,8 +25,9 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
     {
         base.Update();
 
-        if (meetingHud.state is MeetingHud.VoteStates.Animating or MeetingHud.VoteStates.Proceeding || meetingHud.TimerText.text.Contains($" ({PageIndex + 1}/{MaxPageIndex + 1})"))
-            return; // TimerText does not update there                                                 ^ Sometimes the timer text is spammed with the page counter for some weird reason so this is just a band-aid fix for it
+        if (meetingHud.state is MeetingHud.VoteStates.Animating or MeetingHud.VoteStates.Proceeding ||
+            meetingHud.TimerText.text.Contains($" ({PageIndex + 1}/{MaxPageIndex + 1})"))
+            return;
 
         meetingHud.TimerText.text += $" ({PageIndex + 1}/{MaxPageIndex + 1})";
     }
@@ -36,8 +36,10 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
     {
         var i = 0;
 
-        foreach (var button in Targets) {
-            if (i >= PageIndex * MaxPerPage && i < (PageIndex + 1) * MaxPerPage) {
+        foreach (var button in Targets)
+        {
+            if (i >= PageIndex * MaxPerPage && i < (PageIndex + 1) * MaxPerPage)
+            {
                 button.gameObject.SetActive(true);
 
                 var relativeIndex = i % MaxPerPage;
@@ -45,14 +47,17 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
                 var col = relativeIndex % 3;
                 var buttonTransform = button.transform;
                 buttonTransform.localPosition = meetingHud.VoteOrigin +
-                                          new Vector3(
-                                              meetingHud.VoteButtonOffsets.x * col,
-                                              meetingHud.VoteButtonOffsets.y * row,
-                                              buttonTransform.localPosition.z
-                                          );
-            } else {
+                                                new Vector3(
+                                                    meetingHud.VoteButtonOffsets.x * col,
+                                                    meetingHud.VoteButtonOffsets.y * row,
+                                                    buttonTransform.localPosition.z
+                                                );
+            }
+            else
+            {
                 button.gameObject.SetActive(false);
             }
+
             i++;
         }
     }

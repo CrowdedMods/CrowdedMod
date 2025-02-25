@@ -1,11 +1,10 @@
-﻿using System.Linq;
-using AmongUs.GameOptions;
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using Reactor;
 using Reactor.Networking;
 using Reactor.Networking.Attributes;
+using Reactor.Utilities;
 
 namespace CrowdedMod;
 
@@ -13,18 +12,19 @@ namespace CrowdedMod;
 [BepInProcess("Among Us.exe")]
 [BepInDependency(ReactorPlugin.Id)]
 [ReactorModFlags(ModFlags.RequireOnAllClients)]
-[BepInDependency("gg.reactor.debugger", BepInDependency.DependencyFlags.SoftDependency)] // fix debugger overwriting MinPlayers
+[BepInDependency("gg.reactor.debugger", BepInDependency.DependencyFlags.SoftDependency)]
 public partial class CrowdedModPlugin : BasePlugin
 {
-    public const int MaxPlayers = 127;
-    public const int MaxImpostors = 127 / 2;
+    public const int MaxPlayers = 254; // allegedly. should stick to 127 tho
+    public const int MaxImpostors = MaxPlayers / 2;
 
-    private Harmony Harmony { get; } = new (Id);
+    public static bool ForceDisableFreeColor { get; set; } = false;
+
+    private Harmony Harmony { get; } = new(Id);
 
     public override void Load()
     {
-        NormalGameOptionsV07.RecommendedImpostors = NormalGameOptionsV07.MaxImpostors = Enumerable.Repeat(127, 127).ToArray();
-        NormalGameOptionsV07.MinPlayers = Enumerable.Repeat(4, 127).ToArray();
+        ReactorCredits.Register<CrowdedModPlugin>(ReactorCredits.AlwaysShow);
 
         Harmony.PatchAll();
     }

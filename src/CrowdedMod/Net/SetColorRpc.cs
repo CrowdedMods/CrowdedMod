@@ -1,9 +1,10 @@
 ﻿using Hazel;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
+
 namespace CrowdedMod.Net;
 
-[RegisterCustomRpc((uint) CustomRpcCalls.SetColor)]
+[RegisterCustomRpc((uint)CustomRpcCalls.SetColor)]
 public class SetColorRpc : PlayerCustomRpc<CrowdedModPlugin, byte>
 {
     public SetColorRpc(CrowdedModPlugin plugin, uint id) : base(plugin, id)
@@ -11,6 +12,7 @@ public class SetColorRpc : PlayerCustomRpc<CrowdedModPlugin, byte>
     }
 
     public override RpcLocalHandling LocalHandling => RpcLocalHandling.After;
+
     public override void Write(MessageWriter writer, byte data)
     {
         writer.Write(data);

@@ -11,12 +11,13 @@ namespace CrowdedMod.Components;
 [RegisterInIl2Cpp]
 public class VitalsPagingBehaviour : AbstractPagingBehaviour
 {
-    public VitalsPagingBehaviour(IntPtr ptr) : base(ptr) {}
+    public VitalsPagingBehaviour(IntPtr ptr) : base(ptr)
+    {
+    }
 
     public VitalsMinigame vitalsMinigame = null!;
 
-    [HideFromIl2Cpp]
-    public IEnumerable<VitalsPanel> Targets => vitalsMinigame.vitals.ToArray();
+    [HideFromIl2Cpp] public IEnumerable<VitalsPanel> Targets => vitalsMinigame.vitals.ToArray();
     public override int MaxPageIndex => (Targets.Count() - 1) / MaxPerPage;
     private TextMeshPro PageText = null!;
 
@@ -49,10 +50,10 @@ public class VitalsPagingBehaviour : AbstractPagingBehaviour
                 var col = relativeIndex % 3;
                 var panelTransform = panel.transform;
                 panelTransform.localPosition = new Vector3(
-                                                    vitalsMinigame.XStart + vitalsMinigame.XOffset * col,
-                                                    vitalsMinigame.YStart + vitalsMinigame.YOffset * row,
-                                                    panelTransform.localPosition.z
-                                                );
+                    vitalsMinigame.XStart + vitalsMinigame.XOffset * col,
+                    vitalsMinigame.YStart + vitalsMinigame.YOffset * row,
+                    panelTransform.localPosition.z
+                );
             }
             else
                 panel.gameObject.SetActive(false);

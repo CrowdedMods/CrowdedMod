@@ -7,9 +7,9 @@ internal static class MiniGamePatches
     [HarmonyPatch(typeof(SecurityLogger), nameof(SecurityLogger.Awake))]
     public static class SecurityLoggerPatch
     {
-        public static void Postfix(ref SecurityLogger __instance)
+        public static void Postfix(SecurityLogger __instance)
         {
-            __instance.Timers = new float[127];
+            __instance.Timers = new float[CrowdedModPlugin.MaxPlayers];
         }
     }
 }

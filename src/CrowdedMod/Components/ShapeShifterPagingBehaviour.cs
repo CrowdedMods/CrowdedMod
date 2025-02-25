@@ -16,8 +16,7 @@ public class ShapeShifterPagingBehaviour : AbstractPagingBehaviour
     }
 
     public ShapeshifterMinigame shapeshifterMinigame = null!;
-    [HideFromIl2Cpp]
-    public IEnumerable<ShapeshifterPanel> Targets => shapeshifterMinigame.potentialVictims.ToArray();
+    [HideFromIl2Cpp] public IEnumerable<ShapeshifterPanel> Targets => shapeshifterMinigame.potentialVictims.ToArray();
 
     public override int MaxPageIndex => (Targets.Count() - 1) / MaxPerPage;
     private TextMeshPro PageText = null!;
@@ -40,7 +39,8 @@ public class ShapeShifterPagingBehaviour : AbstractPagingBehaviour
 
         foreach (var panel in Targets)
         {
-            if (i >= PageIndex * MaxPerPage && i < (PageIndex + 1) * MaxPerPage) {
+            if (i >= PageIndex * MaxPerPage && i < (PageIndex + 1) * MaxPerPage)
+            {
                 panel.gameObject.SetActive(true);
 
                 var relativeIndex = i % MaxPerPage;
@@ -48,11 +48,13 @@ public class ShapeShifterPagingBehaviour : AbstractPagingBehaviour
                 var col = relativeIndex % 3;
                 var buttonTransform = panel.transform;
                 buttonTransform.localPosition = new Vector3(
-                                                    shapeshifterMinigame.XStart + shapeshifterMinigame.XOffset * col,
-                                                    shapeshifterMinigame.YStart + shapeshifterMinigame.YOffset * row,
-                                                    buttonTransform.localPosition.z
-                                                );
-            } else {
+                    shapeshifterMinigame.XStart + shapeshifterMinigame.XOffset * col,
+                    shapeshifterMinigame.YStart + shapeshifterMinigame.YOffset * row,
+                    buttonTransform.localPosition.z
+                );
+            }
+            else
+            {
                 panel.gameObject.SetActive(false);
             }
 
