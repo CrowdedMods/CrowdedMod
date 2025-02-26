@@ -22,12 +22,12 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
         {
             if (targets == null)
             {
-                targets = meetingHud.playerStates.OrderBy(p => p.AmDead);
+                targets = meetingHud.playerStates.OrderBy(p => p.AmDead).ToArray();
             }
             return targets;
         }
     }
-    private IEnumerable<PlayerVoteArea>? targets;
+    private PlayerVoteArea[]? targets;
 
     public override int MaxPageIndex
     {
