@@ -16,7 +16,19 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
 
     internal MeetingHud meetingHud = null!;
 
-    [HideFromIl2Cpp] public IEnumerable<PlayerVoteArea> Targets => meetingHud.playerStates.OrderBy(p => p.AmDead);
+    [HideFromIl2Cpp] public IEnumerable<PlayerVoteArea> Targets
+    {
+        get
+        {
+            if (targets == null)
+            {
+                targets = meetingHud.playerStates.OrderBy(p => p.AmDead);
+            }
+            return targets;
+        }
+    }
+    private IEnumerable<PlayerVoteArea>? targets;
+
     public override int MaxPageIndex
     {
         get
@@ -28,7 +40,6 @@ public class MeetingHudPagingBehaviour : AbstractPagingBehaviour
             return maxPageIndex;
         }
     }
-
     private int maxPageIndex = -1;
 
     public override void Start() => OnPageChanged();
