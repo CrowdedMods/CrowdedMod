@@ -4,8 +4,6 @@ using System.Linq;
 using Il2CppInterop.Runtime.Attributes;
 using Reactor.Utilities.Attributes;
 using UnityEngine;
-using Reactor.Networking.Rpc;
-using Reactor.Utilities;
 
 namespace CrowdedMod.Components;
 
