@@ -49,8 +49,9 @@ public partial class CrowdedModPlugin : BasePlugin
     }
 
     private static bool IsVanillaServer(IRegionInfo regionInfo)
-        => regionInfo.TranslateName is
-            StringNames.ServerAS or
-            StringNames.ServerEU or
-            StringNames.ServerNA;
+        => regionInfo != null &&
+        regionInfo.TranslateName is
+        StringNames.ServerAS or
+        StringNames.ServerEU or
+        StringNames.ServerNA;
 }
