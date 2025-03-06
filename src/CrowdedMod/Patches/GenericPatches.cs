@@ -113,7 +113,7 @@ internal static class GenericPatches
 
         public static void Postfix(GameStartManager __instance)
         {
-            if (string.IsNullOrEmpty(fixDummyCounterColor) || 
+            if (string.IsNullOrEmpty(fixDummyCounterColor) ||
                 GameData.Instance == null ||
                 GameManager.Instance?.LogicOptions == null)
             {
@@ -167,7 +167,7 @@ internal static class GenericPatches
             return false;
         }
     }
-    
+
     private static void TryAdjustOptionsRecommendations(GameOptionsManager manager)
     {
         const int MaxPlayers = CrowdedModPlugin.MaxPlayers;
@@ -181,7 +181,7 @@ internal static class GenericPatches
         var killRecommendation = ((Il2CppStructArray<int>)Enumerable.Repeat(0, MaxPlayers + 1).ToArray())
             .Cast<Il2CppSystem.Object>();
 
-            
+
         const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
         // all these fields are currently static, but we're doing a forward compat
         // static fields ignore object param so non-null instance is ok
@@ -207,7 +207,7 @@ internal static class GenericPatches
             }
         }
     }
-    
+
     [HarmonyPatch(typeof(GameOptionsManager), nameof(GameOptionsManager.SwitchGameMode))]
     public static class GameOptionsManager_SwitchGameMode
     {
@@ -240,6 +240,15 @@ internal static class GenericPatches
                     }
                 }
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
+    public static class RemoveVanillaServerPatch
+    {
+        public static void Postfix()
+        {
+            CrowdedModPlugin.RemoveVanillaServer();
         }
     }
 }
