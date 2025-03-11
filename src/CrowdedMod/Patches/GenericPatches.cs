@@ -244,4 +244,13 @@ internal static class GenericPatches
             }
         }
     }
+
+    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
+    public static class RemoveVanillaServerPatch
+    {
+        public static void Postfix()
+        {
+            CrowdedModPlugin.RemoveVanillaServer();
+        }
+    }
 }
